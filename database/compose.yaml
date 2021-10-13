@@ -2,6 +2,26 @@
 version: '3.1'
 
 services:
+  server:
+    build: ../server/
+    restart: always
+    environment:
+      POSTGRES_USER: pg
+      POSTGRES_PASSWORD: azerty
+      APP_KEY: 8d5ca149e4e94f77b7320f5f5004ea65
+      APP_Name: server
+      NODE_ENV: production
+      PORT: 3333
+      DB_CONNECTION: pg
+      PG_HOST: localhost
+      PG_PORT: 5433
+      PG_USER: pg
+      PG_PASSWORD: azerty
+      PG_DB_NAME: photos
+      DRIVE_DISK: local
+      TZ: UTC
+    ports:
+      - "5433:5432"
   db:
     build: .
     restart: always
