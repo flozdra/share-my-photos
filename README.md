@@ -1,1 +1,1 @@
-# share-my-pics
+# share-my-photos
