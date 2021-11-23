@@ -1,10 +1,10 @@
-import {BaseModel, beforeSave, BelongsTo, belongsTo, column} from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, beforeSave, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
-import Organisation from "App/Models/Organisation";
+import Organisation from 'App/Models/Organisation'
 
 export default class User extends BaseModel {
   public static connection = 'pg'
-  public static table = 'auth.user'
+  public static table = 'app.user'
 
   @belongsTo(() => Organisation, {
     foreignKey: 'id',
@@ -14,7 +14,7 @@ export default class User extends BaseModel {
   @column({ columnName: 'id', isPrimary: true })
   public id: number
 
-  @column({ columnName: 'role' })
+  @column({ columnName: 'email' })
   public email: string
 
   @column({ columnName: 'firstname' })
@@ -28,6 +28,9 @@ export default class User extends BaseModel {
 
   @column({ columnName: 'organisation_id' })
   public organisationId: number
+
+  @column({ columnName: 'remember_me_token' })
+  public rememberMeToken: boolean
 
   @beforeSave()
   public static async hashPasswordEncrypt(user: User) {

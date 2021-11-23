@@ -23,10 +23,27 @@ services:
     ports:
       - "5433:5432"
   db:
-    build: .
+    #build: .
+    image: postgres
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
     restart: always
     environment:
-      POSTGRES_USER: pg
+      POSTGRES_USER: postgre
       POSTGRES_PASSWORD: azerty
     ports:
       - "5433:5432"
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/
+  minio:
+    image: 'bitnami/minio:latest'
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    environment:
+      - MINIO_ACCESS_KEY=minio-access-key
+      - MINIO_SECRET_KEY=minio-secret-key
+      - MINIO_DEFAULT_BUCKETS=photos:policy

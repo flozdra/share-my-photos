@@ -1,5 +1,8 @@
 {
   "typescript": true,
+  "namespaces": {
+    "httpControllers": "App/Controllers"
+  },
   "commands": [
     "./commands",
     "@adonisjs/core/build/commands/index.js",
@@ -20,7 +23,10 @@
   "providers": [
     "./providers/AppProvider",
     "@adonisjs/core",
-    "@adonisjs/lucid"
+    "@adonisjs/lucid",
+    "@adonisjs/auth",
+    "@adonisjs/drive-s3",
+    "@adonisjs/session"
   ],
   "aceProviders": [
     "@adonisjs/repl"

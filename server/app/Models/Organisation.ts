@@ -1,9 +1,9 @@
-import {BaseModel, column, HasMany, hasMany} from '@ioc:Adonis/Lucid/Orm'
-import User from "App/Models/User";
+import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import User from 'App/Models/User'
 
 export default class Organisation extends BaseModel {
   public static connection = 'pg'
-  public static table = 'auth.organisation'
+  public static table = 'app.organisation'
 
   @hasMany(() => User, {
     foreignKey: 'organisation_id',
@@ -13,6 +13,6 @@ export default class Organisation extends BaseModel {
   @column({ columnName: 'id', isPrimary: true })
   public id: number
 
-  @column({ columnName: 'lastname' })
+  @column({ columnName: 'name' })
   public name: string
 }
