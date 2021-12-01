@@ -6,10 +6,8 @@ services:
     build: ../server/
     restart: always
     environment:
-      POSTGRES_USER: pg
-      POSTGRES_PASSWORD: azerty
       APP_KEY: 8d5ca149e4e94f77b7320f5f5004ea65
-      APP_Name: server
+      APP_NAME: server
       NODE_ENV: production
       PORT: 3333
       DB_CONNECTION: pg
@@ -32,8 +30,8 @@ services:
       retries: 10
     restart: always
     environment:
-      POSTGRES_USER: postgre
-      POSTGRES_PASSWORD: azerty
+      PG_USER: postgre
+      PG_PASSWORD: azerty
     ports:
       - "5433:5432"
     volumes:
@@ -46,4 +44,4 @@ services:
     environment:
       - MINIO_ACCESS_KEY=minio-access-key
       - MINIO_SECRET_KEY=minio-secret-key
-      - MINIO_DEFAULT_BUCKETS=photos:policy
+      - MINIO_DEFAULT_BUCKETS=photos:public

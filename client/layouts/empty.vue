@@ -6,13 +6,11 @@
 
 <script>
 export default {
-  name: 'Default',
+  name: 'empty',
   data() {
-    return {
-    }
+    return {}
   },
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

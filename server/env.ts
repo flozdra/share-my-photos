@@ -15,13 +15,16 @@
 import Env from '@ioc:Adonis/Core/Env'
 
 export default Env.rules({
-  HOST: Env.schema.string({ format: 'host' }),
-  PORT: Env.schema.number(),
   APP_KEY: Env.schema.string(),
   APP_NAME: Env.schema.string(),
-  DRIVE_DISK: Env.schema.enum(['s3'] as const),
-  S3_KEY: Env.schema.string(),
-  S3_SECRET: Env.schema.string(),
-  S3_BUCKET: Env.schema.string(),
-  NODE_ENV: Env.schema.enum(['development', 'production', 'testing'] as const),
+  NODE_ENV: Env.schema.enum(['development', 'production'] as const),
+  PORT: Env.schema.number(),
+  DB_CONNECTION: Env.schema.string(),
+  PG_HOST: Env.schema.string(),
+  PG_PORT: Env.schema.number(),
+  PG_USER: Env.schema.string(),
+  PG_PASSWORD: Env.schema.string(),
+  PG_DB_NAME: Env.schema.string(),
+  DRIVE_DISK: Env.schema.enum(['local'] as const),
+  TZ: Env.schema.enum(['UTC'] as const),
 })

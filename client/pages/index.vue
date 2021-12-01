@@ -1,77 +1,77 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+  <div class="bg-gray-200 h-screen w-full sm:grid sm:grid-cols-2">
+    <div
+      style="background-image: url('/home-bg.svg')"
+      :class="{ [`h-2/4`]: show === 'menu', [`h-1/4`]: show !== 'menu' }"
+      class="
+        sm:h-screen
+        bg-cover bg-right-bottom
+        flex flex-wrap flex-col
+        content-center
+        justify-center
+        transition-h
+        duration-500
+        ease-in-out
+      "
+    >
+      <span class="mt-2 px-3 font-black text-4xl sm:text-5xl text-center"> Share my photos </span>
+      <span class="mt-2 px-6 text-sm text-center inline-block">
+        Watch your photos with your friends and family.
+      </span>
+    </div>
+    <div class="flex flex-col flex-wrap content-center justify-center px-8">
+      <div v-show="show === 'login'">
+        <sp-button
+          icon="mdi-arrow-left"
+          transparent
+          text-color="black"
+          class="my-2"
+          @click="show = 'menu'"
+        ></sp-button>
+
+        <Login></Login>
+      </div>
+      <div v-show="show === 'register'">
+        <!--        <vs-button transparent size="l" @click="show = 'menu'">-->
+        <!--          <i class="bx bx-left-arrow-alt bx-sm"></i>-->
+        <!--        </vs-button>-->
+
+        <Login></Login>
+      </div>
+      <div v-show="show === 'menu'">
+        <sp-card-button
+          class="max-w-64 sm:max-w-72 md:max-w-96 my-8"
+          title="Login"
+          text="Log in the application to start sharing your photos."
+          img="/login-icon.svg"
+          @click="show = 'login'"
+        ></sp-card-button>
+        <sp-card-button
+          class="max-w-64 sm:max-w-72 md:max-w-96 my-8"
+          title="Register"
+          text="Don't have an account yet ? Join the community."
+          img="/register-icon.svg"
+          color="green-400"
+          @click="show = 'register'"
+        ></sp-card-button>
+      </div>
+    </div>
+  </div>
 </template>
+
+<script>
+import SpCardButton from '~/components/Utils/sp-card-button'
+import SpButton from '~/components/Utils/sp-button'
+export default {
+  name: 'Index',
+  layout: 'empty',
+  components: { SpCardButton, SpButton },
+  data() {
+    return {
+      show: 'menu', // enum('menu', 'login', 'register')
+    }
+  },
+}
+</script>
+
+<style scoped></style>
