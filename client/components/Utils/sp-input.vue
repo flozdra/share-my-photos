@@ -12,7 +12,7 @@
       :type="type"
       :autocomplete="type"
       :required="isRequired"
-      :placeholder="placeholder"
+      :placeholder="placeholder || label"
       class="
         appearance-none
         text-sm
@@ -22,7 +22,8 @@
         w-full
         px-3
         py-2
-        border border-gray-300
+        bg-gray-50
+        border-2 border-gray-200
         placeholder-gray-500
         text-gray-900
         z-10
@@ -31,7 +32,7 @@
     />
     <div
       class="z-0 px-1 text-xs text-red-600 transition-all duration-300"
-      :class="{ ['transform -translate-y-6']: !validField && field !== '' }"
+      :class="{ ['transform -translate-y-6']: validField || field === '' }"
     >
       <span>{{ 'Invalid email' }}</span>
     </div>
@@ -66,6 +67,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    rules: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -77,7 +82,8 @@ export default {
   },
   computed: {
     validField() {
-      return this.regex[this.type]?.test(this.field) || true
+      if (!this.rules) return true
+      return this.regex[this.type] ? this.regex[this.type].test(this.field) : true
     },
     isRequired() {
       return this.required || ['email', 'password'].includes(this.type)

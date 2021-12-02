@@ -50,7 +50,7 @@ export default {
 
 <style scoped>
 .base-button {
-  @apply filter drop-shadow-md rounded-xl active:opacity-75;
+  @apply filter drop-shadow-xl rounded-xl active:opacity-75;
 }
 .elevated {
   @apply hover:transition duration-200 transform hover:-translate-y-0.5;

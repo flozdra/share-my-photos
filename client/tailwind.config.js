@@ -20,6 +20,7 @@ module.exports = {
       scale: ['active', 'group-hover'],
       rotate: ['group-hover'],
       opacity: ['active'],
+      dropShadow: ['hover', 'group-hover'],
     },
   },
   plugins: [],
