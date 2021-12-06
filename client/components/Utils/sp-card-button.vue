@@ -9,7 +9,7 @@
       ease-in-out
       transform
       hover:scale-105
-      active:opacity-75
+      active:opacity-80
       select-none
     "
     @click="$emit('click')"
@@ -29,12 +29,12 @@
         rounded-3xl
         group-hover:-rotate-6`"
     ></div>
-    <div class="relative bg-white rounded-3xl flex justify-start items-center">
-      <div class="flex-none w-24 sm:w-32 relative">
-        <img :src="img" alt="card-button-image" class="p-3 object-contain" />
+    <div class="flex relative justify-start items-center bg-white rounded-3xl">
+      <div class="relative flex-none w-24 sm:w-32">
+        <img :src="img" alt="card-button-image" class="object-contain p-3" />
       </div>
-      <div class="p-3 flex flex-col justify-center align-middle">
-        <span class="font-bold text-xl sm:text-2xl">{{ title }}</span>
+      <div class="flex flex-col justify-center p-3 align-middle">
+        <span class="text-xl font-bold sm:text-2xl">{{ title }}</span>
         <span class="text-xs sm:text-sm">{{ text }}</span>
       </div>
     </div>

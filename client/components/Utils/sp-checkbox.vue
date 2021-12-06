@@ -4,10 +4,7 @@
     @click="$emit('change', !checked)"
   >
     <input v-model="inputValue" name="label" type="checkbox" class="h-4 w-4" />
-    <div
-      class="relative w-5 h-5 transition duration-150"
-      :class="{ ['shadow-lg']: checked }"
-    >
+    <div class="relative w-5 h-5 transition duration-150" :class="{ ['shadow-lg']: checked }">
       <span
         class="
           absolute
@@ -72,16 +69,12 @@ export default {
 </script>
 
 <style scoped>
+/* REMOVE BASIC INPUT */
 .sp-checkbox input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
   height: 0;
   width: 0;
-}
-.sp-checkmark {
-  height: 25px;
-  width: 25px;
-  background-color: #eee;
 }
 </style>

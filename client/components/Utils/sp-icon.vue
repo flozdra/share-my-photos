@@ -1,14 +1,16 @@
 <template>
+  <!--  <div :style="`width: ${getSize}px; height: ${getSize}px;`">-->
   <span
     class="mdi"
     :class="{
       [`${icon}`]: !!icon,
-      ['mdi-spin']: spin,
+      ['sp-icon-spin']: spin,
       [`mdi-rotate-${rotate}`]: +rotate > 0,
       [`mdi-${getSize}px`]: size,
       [`text-${color}`]: color,
     }"
   ></span>
+  <!--  </div>-->
 </template>
 
 <script>
@@ -61,4 +63,17 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.sp-icon-spin {
+  animation: sp-icon-rotate 0.7s ease infinite;
+}
+
+@keyframes sp-icon-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+</style>

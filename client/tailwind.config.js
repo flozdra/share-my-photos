@@ -15,12 +15,14 @@ module.exports = {
   },
   variants: {
     extend: {
-      transitionProperty: ['hover', 'focus'],
+      transitionProperty: ['hover', 'active'],
+      transitionDuration: ['hover', 'active'],
       translate: ['hover'],
       scale: ['active', 'group-hover'],
       rotate: ['group-hover'],
       opacity: ['active'],
       dropShadow: ['hover', 'group-hover'],
+      backgroundColor: ['active'],
     },
   },
   plugins: [],

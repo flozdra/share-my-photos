@@ -40,13 +40,13 @@
 
       <div v-show="show === 'login'" class="w-full sm:w-72 md:w-80 xl:w-96">
         <div>
-          <sp-button
-            icon="mdi-arrow-left"
-            transparent
-            text-color="black"
-            class="my-2"
-            @click="show = 'menu'"
-          ></sp-button>
+          <!--          <sp-btn-->
+          <!--            icon="mdi-arrow-left"-->
+          <!--            color="blue-500"-->
+          <!--            text-color="white"-->
+          <!--            class="my-2"-->
+          <!--            @click="show = 'menu'"-->
+          <!--          ></sp-btn>-->
 
           <Login></Login>
         </div>
@@ -64,12 +64,12 @@
 
 <script>
 import SpCardButton from '~/components/Utils/sp-card-button'
-import SpButton from '~/components/Utils/sp-button'
+import SpBtn from '~/components/Utils/sp-button'
 
 export default {
   name: 'Index',
   layout: 'empty',
-  components: { SpCardButton, SpButton },
+  components: { SpCardButton, SpBtn },
   data() {
     return {
       show: 'login', // enum('menu', 'login', 'register')
