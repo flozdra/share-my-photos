@@ -22,7 +22,6 @@ psql -v ON_ERROR_STOP=1 --username "$PG_USER" --dbname "$POSTGRES_DB" <<-EOSQL
     	firstname varchar(300),
     	lastname varchar(300),
     	password varchar,
-    	organisation_id int
     );
 
 
@@ -32,6 +31,7 @@ psql -v ON_ERROR_STOP=1 --username "$PG_USER" --dbname "$POSTGRES_DB" <<-EOSQL
     		constraint organisation_pk
     			primary key,
     	name varchar(300)
+    	created_by_user_id int
     );
 
 
@@ -53,6 +53,7 @@ psql -v ON_ERROR_STOP=1 --username "$PG_USER" --dbname "$POSTGRES_DB" <<-EOSQL
     		constraint comment_pk
     			primary key,
     	user_id int,
+      creation timestamptz,
     	text text,
     	photo_id int
     );
@@ -71,5 +72,16 @@ psql -v ON_ERROR_STOP=1 --username "$PG_USER" --dbname "$POSTGRES_DB" <<-EOSQL
     	description text,
     	tags varchar(100) []
     );
+
+    create table app.organisation_user
+    (
+        organisation_id int not null
+            constraint organisation_user_organisation_id_fk
+                references app.organisation
+            constraint organisation_user_user_id_fk
+                references app."user",
+        user_id         int
+    );
+
     COMMIT;
 EOSQL

@@ -25,6 +25,6 @@ export default Env.rules({
   PG_USER: Env.schema.string(),
   PG_PASSWORD: Env.schema.string(),
   PG_DB_NAME: Env.schema.string(),
-  DRIVE_DISK: Env.schema.enum(['local'] as const),
-  TZ: Env.schema.enum(['UTC'] as const),
+  DRIVE_DISK: Env.schema.enum(['s3'] as const),
+  TZ: Env.schema.enum.optional(['UTC'] as const),
 })

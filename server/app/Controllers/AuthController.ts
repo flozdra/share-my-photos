@@ -15,6 +15,8 @@ export default class AuthController {
 
   public async getUser(ctx: HttpContextContract) {
     try {
+      await ctx.auth.user?.load('organisations')
+      return ctx.response.ok(ctx.auth.user)
     } catch (e) {
       ctx.logger.error(e)
       return ctx.response.internalServerError({ message: 'Internal server error' })
@@ -23,6 +25,7 @@ export default class AuthController {
 
   public async logout(ctx: HttpContextContract) {
     try {
+      await ctx.auth.use('web').logout()
       return ctx.response.ok({ message: 'Success' })
     } catch (e) {
       ctx.logger.error(e)

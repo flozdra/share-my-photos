@@ -7,7 +7,8 @@
     "./commands",
     "@adonisjs/core/build/commands/index.js",
     "@adonisjs/repl/build/commands",
-    "@adonisjs/lucid/build/commands"
+    "@adonisjs/lucid/build/commands",
+    "@adonisjs/bouncer/build/commands"
   ],
   "exceptionHandlerNamespace": "App/Exceptions/Handler",
   "aliases": {
@@ -18,7 +19,8 @@
   },
   "preloads": [
     "./start/routes",
-    "./start/kernel"
+    "./start/kernel",
+    "./start/bouncer"
   ],
   "providers": [
     "./providers/AppProvider",
@@ -26,7 +28,9 @@
     "@adonisjs/lucid",
     "@adonisjs/auth",
     "@adonisjs/drive-s3",
-    "@adonisjs/session"
+    "@adonisjs/session",
+    "@adonisjs/shield",
+    "@adonisjs/bouncer"
   ],
   "aceProviders": [
     "@adonisjs/repl"

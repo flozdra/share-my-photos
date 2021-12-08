@@ -1,15 +1,28 @@
-import { BaseModel, beforeSave, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  beforeSave,
+  column,
+  HasMany,
+  hasMany,
+  ManyToMany,
+  manyToMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
 import Organisation from 'App/Models/Organisation'
+import Album from 'App/Models/Album'
 
 export default class User extends BaseModel {
   public static connection = 'pg'
   public static table = 'app.user'
 
-  @belongsTo(() => Organisation, {
-    foreignKey: 'id',
+  @manyToMany(() => Organisation, {
+    pivotTable: 'app.organisation_user',
+    serializeAs: 'organisations',
   })
-  public organisation: BelongsTo<typeof Organisation>
+  public organisations: ManyToMany<typeof Organisation>
+
+  @hasMany(() => Album, { localKey: 'id', foreignKey: 'user_id' })
+  public albums: HasMany<typeof Album>
 
   @column({ columnName: 'id', isPrimary: true })
   public id: number
@@ -25,9 +38,6 @@ export default class User extends BaseModel {
 
   @column({ columnName: 'password', serializeAs: null })
   public password: string | null
-
-  @column({ columnName: 'organisation_id' })
-  public organisationId: number
 
   @column({ columnName: 'remember_me_token' })
   public rememberMeToken: boolean

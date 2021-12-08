@@ -18,3 +18,8 @@
 |
 */
 import 'App/Routes/AuthRoutes'
+import 'App/Routes/OrganisationRoutes'
+import 'App/Routes/UserRoutes'
+import 'App/Routes/AlbumRoutes'
+import 'App/Routes/PhotoRoutes'
+import 'App/Routes/CommentRoutes'

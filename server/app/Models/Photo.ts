@@ -1,23 +1,30 @@
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import Album from 'App/Models/Album'
 import { DateTime } from 'luxon'
 import User from 'App/Models/User'
+import Comment from 'App/Models/Comment'
 
 export default class Photo extends BaseModel {
   public static connection = 'pg'
   public static table = 'app.photo'
 
   @belongsTo(() => Album, {
-    foreignKey: 'id',
-    localKey: 'albumId',
+    foreignKey: 'albumId',
+    localKey: 'id',
   })
   public album: BelongsTo<typeof Album>
 
   @belongsTo(() => User, {
-    foreignKey: 'id',
-    localKey: 'userId',
+    localKey: 'id',
+    foreignKey: 'userId',
   })
   public user: BelongsTo<typeof User>
+
+  @hasMany(() => Comment, {
+    localKey: 'id',
+    foreignKey: 'photoId',
+  })
+  public comments: HasMany<typeof Comment>
 
   @column({ columnName: 'id', isPrimary: true })
   public id: number
@@ -41,5 +48,5 @@ export default class Photo extends BaseModel {
   public description: string
 
   @column({ columnName: 'tags' })
-  public tags: string[]
+  public tags: (string | undefined)[]
 }

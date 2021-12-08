@@ -42,6 +42,6 @@ services:
       - '9000:9000'
       - '9001:9001'
     environment:
-      - MINIO_ACCESS_KEY=minio-access-key
-      - MINIO_SECRET_KEY=minio-secret-key
+      - MINIO_ACCESS_KEY=minio_access_key
+      - MINIO_SECRET_KEY=minio_secret_key
       - MINIO_DEFAULT_BUCKETS=photos:public

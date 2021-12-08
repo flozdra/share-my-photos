@@ -24,11 +24,13 @@
   },
   "dependencies": {
     "@adonisjs/auth": "^8.0.10",
+    "@adonisjs/bouncer": "^2.2.5",
     "@adonisjs/core": "^5.4.1",
     "@adonisjs/drive-s3": "^1.0.5",
     "@adonisjs/lucid": "^16.3.2",
     "@adonisjs/repl": "^3.1.6",
     "@adonisjs/session": "^6.1.2",
+    "@adonisjs/shield": "^7.0.7",
     "luxon": "^2.1.1",
     "pg": "^8.7.1",
     "phc-bcrypt": "^1.0.7",
