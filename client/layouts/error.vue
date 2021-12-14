@@ -4,8 +4,7 @@
 
 <script>
 export default {
-  name: 'Error',
-  layout: 'empty',
+  name: 'ErrorLayout',
 }
 </script>
 

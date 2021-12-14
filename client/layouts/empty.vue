@@ -1,12 +1,11 @@
 <template>
-  <div>
-    <nuxt keep-alive />
-  </div>
+  <v-app style="background: #e5e7eb"><nuxt keep-alive /></v-app>
 </template>
 
 <script>
 export default {
-  name: 'empty',
+  // eslint-disable-next-line
+  name: 'EmptyLayout',
   data() {
     return {}
   },

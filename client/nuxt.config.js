@@ -1,11 +1,10 @@
+import colors from 'vuetify/es5/util/colors'
+
 export default {
-  ssr: true,
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
+    titleTemplate: '%s - client',
     title: 'client',
-    htmlAttrs: {
-      lang: 'en',
-    },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -33,10 +32,10 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    // https://go.nuxtjs.dev/typescript
-    '@nuxt/typescript-build',
-    // https://go.nuxtjs.dev/tailwindcss
-    '@nuxtjs/tailwindcss',
+    // https://go.nuxtjs.dev/eslint
+    '@nuxtjs/eslint-module',
+    // https://go.nuxtjs.dev/vuetify
+    '@nuxtjs/vuetify',
     '@nuxtjs/google-fonts',
   ],
 
@@ -44,15 +43,39 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    'nuxtjs-mdi-font',
+    // https://go.nuxtjs.dev/pwa
+    '@nuxtjs/pwa',
+    '@nuxtjs/auth-next',
   ],
+
+  auth: {
+    strategies: {
+      cookie: {
+        cookie: {
+          // (optional) If set, we check this cookie existence for loggedIn check
+          name: 'X-XSRF-TOKEN',
+        },
+        user: {
+          property: 'user',
+          autoFetch: true,
+        },
+        endpoints: {
+          login: { url: '/api/auth/login', method: 'post' },
+          logout: { url: '/api/auth/logout', method: 'post' },
+          user: { url: '/api/auth/user', method: 'get' },
+        },
+      },
+    },
+  },
+  router: {
+    middleware: ['auth'],
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     proxy: true, // proxy only for API
     credentials: true,
   },
-
   proxy: {
     '/api/': {
       target: `${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/`,
@@ -67,6 +90,33 @@ export default {
     },
     display: 'swap',
   },
+
+  // PWA module configuration: https://go.nuxtjs.dev/pwa
+  pwa: {
+    manifest: {
+      lang: 'en',
+    },
+  },
+
+  // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
+  vuetify: {
+    treeShake: true,
+    customVariables: ['~/assets/variables.scss'],
+    theme: {
+      dark: false,
+      themes: {
+        dark: {
+          primary: '#3b82f6',
+          secondary: '#ec4899',
+          info: '#facc15',
+          warning: '#f97316',
+          error: '#dc2626',
+          success: '#10b981',
+        },
+      },
+    },
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 }

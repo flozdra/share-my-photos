@@ -1,78 +1,104 @@
 <template>
-  <div class="bg-gray-200 h-screen w-full sm:grid sm:grid-cols-2">
-    <div
-      style="background-image: url('/home-bg.svg')"
-      :class="{ [`h-2/4`]: show === 'menu', [`h-1/4`]: show !== 'menu' }"
-      class="
-        sm:h-screen
-        bg-cover bg-right-bottom
-        flex flex-wrap flex-col
-        content-center
-        justify-center
-        transition-h
-        duration-300
-        ease-in-out
-      "
-    >
-      <span class="mt-2 px-3 font-black text-4xl sm:text-5xl text-center"> Share my photos </span>
-      <span class="mt-2 px-6 text-sm text-center inline-block">
-        Watch your photos with your friends and family.
-      </span>
-    </div>
-    <div class="relative flex flex-col flex-wrap content-center justify-center p-5">
-      <div v-show="show === 'menu'" class="flex flex-col justify-center">
-        <sp-card-button
-          class="mx-auto my-5 sm:my-8"
-          title="Login"
-          text="Log in the application to start sharing your photos."
-          img="/login-icon.svg"
-          @click="show = 'login'"
-        ></sp-card-button>
-        <sp-card-button
-          class="mx-auto my-5 sm:my-8"
-          title="Register"
-          text="Don't have an account yet ? Join the community."
-          img="/register-icon.svg"
-          color="green-400"
-          @click="show = 'register'"
-        ></sp-card-button>
-      </div>
-
-      <div v-show="show === 'login'" class="w-full sm:w-72 md:w-80 xl:w-96">
-        <div>
-          <!--          <sp-btn-->
-          <!--            icon="mdi-arrow-left"-->
-          <!--            color="blue-500"-->
-          <!--            text-color="white"-->
-          <!--            class="my-2"-->
-          <!--            @click="show = 'menu'"-->
-          <!--          ></sp-btn>-->
-
-          <Login></Login>
+  <v-container class="fill-height pa-0" fluid>
+    <v-row class="fill-height ma-0">
+      <v-col
+        cols="12"
+        md="6"
+        :class="{
+          'fill-height': $vuetify.breakpoint.mdAndUp,
+        }"
+        class="justify-center d-flex align-center"
+        style="
+          background-image: url('/home-bg.svg');
+          background-size: cover;
+          background-position: bottom right;
+        "
+        :style="{
+          'height: 200px': $vuetify.breakpoint.smAndDown,
+        }"
+      >
+        <div class="text-center">
+          <span class="text-h4 text-sm-h3 font-weight-black black--text">Share my photos</span>
+          <br />
+          <span class="d-block mt-2 text-subtitle-1 black--text">
+            Watch your photos with your friends and family.
+          </span>
         </div>
-      </div>
-      <!--      <div v-show="show === 'register'">-->
-      <!--        <vs-button transparent size="l" @click="show = 'menu'">-->
-      <!--          <i class="bx bx-left-arrow-alt bx-sm"></i>-->
-      <!--        </vs-button>-->
+      </v-col>
+      <v-col cols="12" md="6" class="d-flex align-self-md-center justify-center">
+        <div v-if="show === 'menu'" class="d-flex flex-column align-center">
+          <v-hover>
+            <template #default="{ hover }">
+              <v-card
+                :elevation="hover ? 24 : 3"
+                class="my-3 transition-swing"
+                max-width="400"
+                @click="show = 'login'"
+              >
+                <v-list-item>
+                  <v-list-item-avatar size="100">
+                    <v-img src="/login-icon.svg" alt="login-img"></v-img>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title class="text-h5 font-weight-bold">Login</v-list-item-title>
+                    <v-list-item-subtitle style="white-space: normal">
+                      Log in the application to start sharing your photos.
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-card>
+            </template>
+          </v-hover>
 
-      <!--        <Login></Login>-->
-      <!--      </div>-->
-    </div>
-  </div>
+          <v-hover>
+            <template #default="{ hover }">
+              <v-card
+                :elevation="hover ? 24 : 3"
+                class="my-3 transition-swing"
+                max-width="400"
+                @click="show = 'register'"
+              >
+                <v-list-item>
+                  <v-list-item-avatar size="100">
+                    <v-img src="/register-icon.svg" alt="login-img"></v-img>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title class="text-h5 font-weight-bold">Register</v-list-item-title>
+                    <v-list-item-subtitle style="white-space: normal">
+                      Don't have an account yet ? Join the community.
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-card>
+            </template>
+          </v-hover>
+        </div>
+
+        <div v-else class="d-flex flex-column align-center">
+          <v-btn icon class="black--text align-self-start mb-3" large @click="show = 'menu'">
+            <v-icon>mdi-arrow-left</v-icon>
+          </v-btn>
+
+          <Login v-show="show === 'login'"></Login>
+          <Register v-show="show === 'register'"></Register>
+        </div>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import SpCardButton from '~/components/Utils/sp-card-button'
-import SpBtn from '~/components/Utils/sp-button'
+import Login from '~/components/Login'
+import Register from '~/components/Register'
 
 export default {
-  name: 'Index',
+  name: 'IndexPage',
+  auth: 'guest',
+  components: { Login, Register },
   layout: 'empty',
-  components: { SpCardButton, SpBtn },
   data() {
     return {
-      show: 'login', // enum('menu', 'login', 'register')
+      show: 'menu', // enum('menu', 'login', 'register')
     }
   },
 }
