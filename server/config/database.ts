@@ -36,16 +36,16 @@ const databaseConfig: DatabaseConfig = {
     pg: {
       client: 'pg',
       connection: {
-        host: Env.get('PG_HOST'),
-        port: Env.get('PG_PORT'),
-        user: Env.get('PG_USER'),
-        password: Env.get('PG_PASSWORD', ''),
-        database: Env.get('PG_DB_NAME'),
+        host: Env.get('POSTGRES_HOST'),
+        port: Env.get('POSTGRES_PORT'),
+        user: Env.get('POSTGRES_USER'),
+        password: Env.get('POSTGRES_PASSWORD', ''),
+        database: Env.get('POSTGRES_DB_NAME'),
       },
       migrations: {
         naturalSort: true,
       },
-      healthCheck: false,
+      healthCheck: true,
       debug: false,
     },
   },

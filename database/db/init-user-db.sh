@@ -1,17 +1,17 @@
 #!/bin/bash
 set -e
 
-psql -v ON_ERROR_STOP=1 --username "$PG_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
     create database share_my_photos
-    	with owner postgre;
+    	with owner postgres;
 
-    grant connect, create, temporary on database share_my_photos to postgre;
+    grant connect, create, temporary on database share_my_photos to postgres;
 
-    \connect share_my_photos postgre
+    \connect share_my_photos postgres
     BEGIN;
     create schema app;
 
-    alter schema app owner to postgre;
+    alter schema app owner to postgres;
 
     create table app."user"
     (
@@ -21,7 +21,7 @@ psql -v ON_ERROR_STOP=1 --username "$PG_USER" --dbname "$POSTGRES_DB" <<-EOSQL
     	email varchar(300) not null,
     	firstname varchar(300),
     	lastname varchar(300),
-    	password varchar,
+    	password varchar
     );
 
 
@@ -30,7 +30,7 @@ psql -v ON_ERROR_STOP=1 --username "$PG_USER" --dbname "$POSTGRES_DB" <<-EOSQL
     	id serial
     		constraint organisation_pk
     			primary key,
-    	name varchar(300)
+    	name varchar(300),
     	created_by_user_id int
     );
 
