@@ -18,6 +18,9 @@ export default class User extends BaseModel {
   @manyToMany(() => Organisation, {
     pivotTable: 'app.organisation_user',
     serializeAs: 'organisations',
+    onQuery(query) {
+      query.apply((s) => s.metadata()).select('organisation.*')
+    },
   })
   public organisations: ManyToMany<typeof Organisation>
 

@@ -44,6 +44,7 @@ export default class AuthController {
   public async getUser(ctx: HttpContextContract) {
     try {
       await ctx.auth.user?.load('organisations')
+
       return ctx.response.ok(ctx.auth.user)
     } catch (e) {
       ctx.logger.error(e)
