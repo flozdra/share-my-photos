@@ -39,6 +39,7 @@ export default class Organisation extends BaseModel {
         'app.organisation_user.organisation_id',
         'app.organisation.id'
       )
+      .preload('users')
   })
 
   @manyToMany(() => User, {

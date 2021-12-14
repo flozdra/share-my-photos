@@ -1,8 +1,8 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="share-my-photos-app">
     <v-app-bar app color="white" flat>
       <v-container v-if="$vuetify.breakpoint.smAndUp" class="py-0 fill-height">
-        <v-avatar class="mr-5" color="grey darken-1" size="32"></v-avatar>
+        <v-avatar class="mr-5" color="primary" size="32"></v-avatar>
 
         <span class="font-weight-bold">Share my photos</span>
 
@@ -16,10 +16,10 @@
 
     <v-main class="grey lighten-3">
       <v-container>
-        <v-row>
-          <v-col>
-            <v-sheet min-height="70vh" rounded="lg">
-              <!--  -->
+        <v-row justify="center">
+          <v-col cols="12" sm="10" md="8">
+            <v-sheet min-height="70vh" rounded="lg" class="pa-2">
+              <nuxt></nuxt>
             </v-sheet>
           </v-col>
         </v-row>
@@ -39,4 +39,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+::-webkit-scrollbar {
+  display: none;
+}
+</style>

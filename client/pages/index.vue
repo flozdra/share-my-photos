@@ -30,7 +30,7 @@
           <v-hover>
             <template #default="{ hover }">
               <v-card
-                :elevation="hover ? 24 : 3"
+                :elevation="hover ? 12 : 3"
                 class="my-3 transition-swing"
                 max-width="400"
                 @click="show = 'login'"
@@ -53,7 +53,7 @@
           <v-hover>
             <template #default="{ hover }">
               <v-card
-                :elevation="hover ? 24 : 3"
+                :elevation="hover ? 12 : 3"
                 class="my-3 transition-swing"
                 max-width="400"
                 @click="show = 'register'"

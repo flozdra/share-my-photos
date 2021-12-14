@@ -69,7 +69,7 @@ export default {
     redirect: {
       login: '/',
       logout: '/',
-      callback: '/home',
+      callback: '/',
       home: '/home',
     },
   },
@@ -118,6 +118,7 @@ export default {
           warning: '#f97316',
           error: '#dc2626',
           success: '#10b981',
+          shade: '#eeeeee',
         },
       },
     },
