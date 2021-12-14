@@ -1,5 +1,5 @@
 # Use postgres/example user/password credentials
-version: '3.1'
+version: "3.1"
 
 services:
   server:
@@ -24,7 +24,7 @@ services:
     #build: .
     image: postgres
     healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres"]
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres"]
       timeout: 45s
       interval: 10s
       retries: 10
@@ -37,10 +37,10 @@ services:
     volumes:
       - ./db:/docker-entrypoint-initdb.d/
   minio:
-    image: 'bitnami/minio:latest'
+    image: "bitnami/minio:latest"
     ports:
-      - '9000:9000'
-      - '9001:9001'
+      - "9000:9000"
+      - "9001:9001"
     environment:
       - MINIO_ACCESS_KEY=minio_access_key
       - MINIO_SECRET_KEY=minio_secret_key

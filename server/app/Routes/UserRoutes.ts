@@ -1,7 +1,5 @@
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.post('/users', 'UserController.create')
-
 Route.get('/users', 'UserController.get').middleware('auth')
 
 Route.patch('/users/:user_id', 'UserController.patch')

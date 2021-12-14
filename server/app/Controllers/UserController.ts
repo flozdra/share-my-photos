@@ -1,36 +1,9 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import { schema } from '@ioc:Adonis/Core/Validator'
 import Organisation from 'App/Models/Organisation'
 import User from 'App/Models/User'
 
 export default class UserController {
-  public async create(ctx: HttpContextContract) {
-    const payload = await ctx.request.validate({
-      schema: schema.create({
-        lastname: schema.string(),
-        firstname: schema.string(),
-        email: schema.string({ trim: true, escape: true }, [
-          rules.email(),
-          rules.unique({
-            table: 'app.user',
-            column: 'email',
-            caseInsensitive: true,
-          }),
-        ]),
-        password: schema.string(),
-      }),
-    })
-
-    const createdUser = await User.create({
-      lastname: payload.lastname,
-      firstname: payload.firstname,
-      email: payload.email,
-      password: payload.password,
-    })
-
-    await ctx.response.created(createdUser)
-  }
-
   public async patch(ctx: HttpContextContract) {
     const payload = await ctx.request.validate({
       schema: schema.create({

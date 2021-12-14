@@ -53,10 +53,10 @@ export default {
       cookie: {
         cookie: {
           // (optional) If set, we check this cookie existence for loggedIn check
-          name: 'X-XSRF-TOKEN',
+          name: 'XSRF-TOKEN',
         },
         user: {
-          property: 'user',
+          property: '',
           autoFetch: true,
         },
         endpoints: {
@@ -65,6 +65,12 @@ export default {
           user: { url: '/api/auth/user', method: 'get' },
         },
       },
+    },
+    redirect: {
+      login: '/',
+      logout: '/',
+      callback: '/home',
+      home: '/home',
     },
   },
   router: {

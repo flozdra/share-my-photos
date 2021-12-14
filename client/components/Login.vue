@@ -3,20 +3,32 @@
     <v-card-title class="text-h5 font-weight-bold">Login</v-card-title>
     <v-form ref="form" v-model="formValid" lazy-validation>
       <v-card-text>
-        <v-text-field v-model="email" :rules="emailRules" label="Email" required></v-text-field>
+        <v-text-field v-model="email" :rules="emailRules" label="Email" type="email"></v-text-field>
 
         <v-text-field
           v-model="password"
           :rules="passwordRules"
           label="Password"
-          required
+          type="password"
         ></v-text-field>
 
         <v-checkbox v-model="remember" label="Remember me"></v-checkbox>
+        <v-alert v-if="error" class="error--text" color="grey lighten-3">
+          <v-icon left color="error">mdi-information-outline</v-icon>
+          Invalid credentials
+        </v-alert>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn :disabled="loading" color="primary" @click="submitLogin">Login</v-btn>
+        <v-btn
+          class="px-3"
+          :loading="loading"
+          :disabled="loading"
+          color="primary"
+          @click="submitLogin"
+        >
+          Login
+        </v-btn>
       </v-card-actions>
     </v-form>
   </v-card>
@@ -36,20 +48,28 @@ export default {
       password: '',
       passwordRules: [(v) => !!v || 'Password is required'],
       remember: false,
-      label: false,
-      icon: false,
-      disabled: false,
       loading: false,
-      done: false,
       error: false,
     }
   },
   methods: {
     async submitLogin() {
-      await this.$refs.form.validate()
-      if (this.formValid) {
-        // login : What do ?
+      this.error = false
+      this.loading = true
+      try {
+        await this.$refs.form.validate()
+        if (this.formValid) {
+          await this.$auth.loginWith('cookie', {
+            data: {
+              email: this.email,
+              password: this.password,
+            },
+          })
+        }
+      } catch (e) {
+        this.error = true
       }
+      this.loading = false
     },
   },
 }

@@ -1,16 +1,12 @@
 <template>
-  <div class="bg-gray-200 h-screen w-full sm:grid sm:grid-cols-2">
-
-  </div>
+  <div>Hello</div>
 </template>
 
 <script>
 export default {
   name: 'HomePage',
   data() {
-    return {
-      show: 'menu', // enum('menu', 'login', 'register')
-    }
+    return {}
   },
 }
 </script>
