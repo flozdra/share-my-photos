@@ -1,73 +1,40 @@
 <template>
-  <div class="bg-white py-8 px-5 rounded-2xl shadow-lg pb-10">
-    <span class="font-bold text-3xl"> Qu'en penses-tu ? </span>
-    <div class="mt-10 flex flex-col space-y-4 items-center">
-      <div class="flex flex-row space-x-4">
-        <sp-checkbox v-model="label" label="Label"></sp-checkbox>
-        <sp-checkbox v-model="icon" label="Icon"></sp-checkbox>
-      </div>
-      <div class="flex flex-row space-x-4">
-        <sp-checkbox v-model="disabled" label="Disabled"></sp-checkbox>
-        <sp-checkbox v-model="loading" label="Loading"></sp-checkbox>
-      </div>
-      <div class="flex flex-row space-x-4">
-        <sp-checkbox v-model="done" label="Done"></sp-checkbox>
-        <sp-checkbox v-model="error" label="Error"></sp-checkbox>
-      </div>
+  <v-card :width="$vuetify.breakpoint.xs ? 300 : 350">
+    <v-card-title class="text-h5 font-weight-bold">Login</v-card-title>
+    <v-form ref="form" v-model="formValid" lazy-validation>
+      <v-card-text>
+        <v-text-field v-model="email" :rules="emailRules" label="Email" required></v-text-field>
 
-      <sp-btn
-        v-for="(type, i) of ['Primary', 'Secondary', 'Tertiary', 'Warning', 'Danger']"
-        :key="i"
-        :type="type.toLowerCase()"
-        :label="label ? type : null"
-        :icon="icon ? 'mdi-shield' : null"
-        :disabled="disabled"
-        :loading="loading"
-        :done="done"
-        :error="error"
-        @click="test"
-      ></sp-btn>
-    </div>
-    <!--    <form class="mt-8 space-y-2 flex flex-col" action="#" method="POST">-->
-    <!--      <sp-input v-model="email" label="Email address" type="email" rules></sp-input>-->
-    <!--      <sp-input v-model="password" label="Password" type="password"></sp-input>-->
-    <!--      <sp-checkbox v-model="remember" label="Remember me"></sp-checkbox>-->
-    <!--      <sp-button class="self-end" flat text-color="white">Log in</sp-button>-->
-    <!--      <sp-button type=""></sp-button>-->
-    <!--      <sp-button-->
-    <!--        icon="mdi-arrow-left"-->
-    <!--        transparent-->
-    <!--        text-color="black"-->
-    <!--        class="my-2"-->
-    <!--        @click="show = 'menu'"-->
-    <!--      ></sp-button>-->
-    <!--    </form>-->
+        <v-text-field
+          v-model="password"
+          :rules="passwordRules"
+          label="Password"
+          required
+        ></v-text-field>
 
-    <!--    <div class="mt-10">-->
-    <!--      <div class="flex items-center justify-between">-->
-    <!--        <div class="flex items-center"></div>-->
-
-    <!--        <div class="text-sm">-->
-    <!--          <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">-->
-    <!--            Forgot your password?-->
-    <!--          </a>-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </div>-->
-  </div>
+        <v-checkbox v-model="remember" label="Remember me"></v-checkbox>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn :disabled="loading" color="primary" @click="submitLogin">Login</v-btn>
+      </v-card-actions>
+    </v-form>
+  </v-card>
 </template>
 
 <script>
-import SpCheckbox from '~/components/Utils/sp-checkbox'
-import SpBtn from '~/components/Utils/sp-button'
-
 export default {
-  name: 'Login',
-  components: { SpCheckbox, SpBtn },
+  name: 'LoginForm',
   data() {
     return {
+      formValid: false,
       email: '',
+      emailRules: [
+        (v) => !!v || 'E-mail is required',
+        (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+      ],
       password: '',
+      passwordRules: [(v) => !!v || 'Password is required'],
       remember: false,
       label: false,
       icon: false,
@@ -78,8 +45,11 @@ export default {
     }
   },
   methods: {
-    test() {
-      console.log('Click')
+    async submitLogin() {
+      await this.$refs.form.validate()
+      if (this.formValid) {
+        // login : What do ?
+      }
     },
   },
 }

@@ -6,13 +6,11 @@
 
 <script>
 export default {
-  name: 'Default',
+  name: 'DefaultLayout',
   data() {
-    return {
-    }
+    return {}
   },
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
