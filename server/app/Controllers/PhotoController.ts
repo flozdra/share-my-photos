@@ -106,9 +106,7 @@ export default class PhotoController {
 
     await ctx.bouncer.authorize('patchDeletePhoto', photo)
 
-    const updated = await photo
-      .merge({ name: payload.name, description: payload.description, tags: payload.tags })
-      .save()
+    const updated = await photo.merge(payload).save()
 
     await ctx.response.ok(updated)
   }

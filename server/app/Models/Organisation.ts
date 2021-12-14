@@ -40,6 +40,9 @@ export default class Organisation extends BaseModel {
   @column({ columnName: 'name' })
   public name: string
 
+  @column({ columnName: 'color' })
+  public color: string
+
   @column({ columnName: 'created_by_user_id' })
   public createdByUserId: number
 }

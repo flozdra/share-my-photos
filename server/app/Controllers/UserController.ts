@@ -1,22 +1,29 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema } from '@ioc:Adonis/Core/Validator'
-import Organisation from 'App/Models/Organisation'
-import User from 'App/Models/User'
+import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import { rules, schema } from "@ioc:Adonis/Core/Validator";
+import User from "App/Models/User";
 
 export default class UserController {
   public async patch(ctx: HttpContextContract) {
     const payload = await ctx.request.validate({
       schema: schema.create({
-        name: schema.string({}),
+        firstname: schema.string.optional({}),
+        lastname: schema.string.optional({}),
+        email: schema.string.optional({ trim: true, escape: true }, [
+          rules.email(),
+          rules.unique({
+            table: 'app.user',
+            column: 'email',
+            caseInsensitive: true,
+            whereNot: {
+              id: ctx.auth.user!.id,
+            },
+          }),
+        ]),
+        password: schema.string.optional(),
       }),
     })
-
-    const organisation = await Organisation.find(ctx.request.param('organisation_id'))
-    if (!organisation) return ctx.response.notFound({ message: 'Organisation not found' })
-
-    await ctx.bouncer.authorize('getOrganisation', organisation)
-
-    const updated = await organisation.merge({ name: payload.name }).save()
+    await ctx.bouncer.authorize('patchDeleteUser', ctx.auth.user!)
+    const updated = await ctx.auth?.user?.merge(payload).save()
     await ctx.response.ok(updated)
   }
 

@@ -57,7 +57,7 @@ export default class CommentController {
 
     await ctx.bouncer.authorize('patchDeleteComment', comment)
 
-    const updated = await comment.merge({ text: payload.text }).save()
+    const updated = await comment.merge(payload).save()
 
     await ctx.response.ok(updated)
   }

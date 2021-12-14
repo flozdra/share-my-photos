@@ -34,7 +34,8 @@ export default class OrganisationController {
   public async patch(ctx: HttpContextContract) {
     const payload = await ctx.request.validate({
       schema: schema.create({
-        name: schema.string({}),
+        name: schema.string.optional({}),
+        color: schema.string.optional({}),
       }),
     })
 
@@ -43,7 +44,7 @@ export default class OrganisationController {
 
     await ctx.bouncer.authorize('patchDeleteOrganisation', organisation)
 
-    const updated = await organisation.merge({ name: payload.name }).save()
+    const updated = await organisation.merge(payload).save()
 
     await ctx.response.ok(updated)
   }

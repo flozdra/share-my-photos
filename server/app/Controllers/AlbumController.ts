@@ -59,7 +59,7 @@ export default class AlbumController {
 
     await ctx.bouncer.authorize('patchDeleteAlbum', album)
 
-    const updated = await album.merge({ name: payload.name }).save()
+    const updated = await album.merge(payload).save()
     await ctx.response.ok(updated)
   }
 

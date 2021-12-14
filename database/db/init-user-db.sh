@@ -31,7 +31,8 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
     		constraint organisation_pk
     			primary key,
     	name varchar(300),
-    	created_by_user_id int
+    	created_by_user_id int,
+    	color varchar(100)
     );
 
 

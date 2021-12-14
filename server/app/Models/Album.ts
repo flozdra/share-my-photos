@@ -4,9 +4,20 @@ import { DateTime } from 'luxon'
 import User from 'App/Models/User'
 import Photo from 'App/Models/Photo'
 
+// type Builder = ModelQueryBuilderContract<typeof Album>
+
 export default class Album extends BaseModel {
   public static connection = 'pg'
   public static table = 'app.album'
+
+  // public static metadata = scope((query: Builder, id: number) => {
+  //   query
+  //     .where('entity.reseller.id', id)
+  //     .join('entity.client', 'entity.reseller.id', 'entity.client.reseller_id')
+  //     .join('entity.site', 'entity.client.id', 'entity.site.client_id')
+  //     .join('entity.sensor', 'entity.site.id', 'entity.sensor.site_id')
+  //     .select('entity.sensor.id')
+  // })
 
   @belongsTo(() => Organisation, {
     foreignKey: 'id',

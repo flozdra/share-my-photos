@@ -47,9 +47,9 @@ export const { actions } = Bouncer.define(
       return organisation.createdByUserId === authenticatedUser.id
     }
   )
-  .define('patchDeleteUser', async (authenticatedUser: User, userToDelete: User) => {
+  .define('patchDeleteUser', async (authenticatedUser: User, userToPatchDelete: User) => {
     // authorize only if it is the authenticated user
-    return authenticatedUser.id === userToDelete.id
+    return authenticatedUser.id === userToPatchDelete.id
   })
   .define('getAlbum', async (authenticatedUser: User, album: Album) => {
     // authorize if album is in the organisation of user
