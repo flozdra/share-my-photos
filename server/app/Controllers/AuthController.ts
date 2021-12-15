@@ -27,7 +27,7 @@ export default class AuthController {
       password: payload.password,
     })
 
-    await ctx.response.created(createdUser)
+    return ctx.response.created(createdUser)
   }
 
   public async login(ctx: HttpContextContract) {
@@ -35,16 +35,16 @@ export default class AuthController {
       schema: schema.create({
         email: schema.string({}, [rules.email()]),
         password: schema.string(),
+        color: schema.string.optional({}, [rules.regex(/^#[a-fA-F0-9]{8}$/)]),
       }),
     })
 
     await ctx.auth.use('web').attempt(payload.email, payload.password)
+    return ctx.response.ok(ctx.auth.user)
   }
 
   public async getUser(ctx: HttpContextContract) {
     try {
-      await ctx.auth.user?.load('organisations')
-
       return ctx.response.ok(ctx.auth.user)
     } catch (e) {
       ctx.logger.error(e)

@@ -57,7 +57,7 @@ export default class PhotoController {
     await ctx.bouncer.authorize('getAlbum', album)
 
     await album.load('photos', (photo) => photo.preload('comments'))
-    await ctx.response.ok(album.photos)
+    return ctx.response.ok(album.photos)
   }
 
   public async get(ctx: HttpContextContract) {
@@ -108,7 +108,7 @@ export default class PhotoController {
 
     const updated = await photo.merge(payload).save()
 
-    await ctx.response.ok(updated)
+    return ctx.response.ok(updated)
   }
 
   public async delete(ctx: HttpContextContract) {
@@ -119,6 +119,6 @@ export default class PhotoController {
 
     await Drive.delete(photo.url)
     await photo.delete()
-    await ctx.response.ok({ message: 'Successfully deleted' })
+    return ctx.response.ok({ message: 'Successfully deleted' })
   }
 }

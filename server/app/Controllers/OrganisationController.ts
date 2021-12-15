@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema } from '@ioc:Adonis/Core/Validator'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Organisation from 'App/Models/Organisation'
 import User from 'App/Models/User'
 
@@ -8,16 +8,17 @@ export default class OrganisationController {
     const payload = await ctx.request.validate({
       schema: schema.create({
         name: schema.string(),
+        color: schema.string.optional({}, [rules.regex(/^#[a-fA-F0-9]{8}$/)]),
       }),
     })
 
     // create an organisation affected to the authenticated user
     const createdOrganisation = await ctx.auth.user?.related('organisations').create({
-      name: payload.name,
+      ...payload,
       createdByUserId: ctx.auth.user?.id,
     })
 
-    await ctx.response.created(createdOrganisation)
+    return ctx.response.created(createdOrganisation)
   }
 
   public async get(ctx: HttpContextContract) {
@@ -28,7 +29,12 @@ export default class OrganisationController {
 
     await organisation.load('createdByUser')
     await organisation.load('users')
-    await ctx.response.ok(organisation)
+    return ctx.response.ok(organisation)
+  }
+
+  public async getOwnedOrganisations(ctx: HttpContextContract) {
+    await ctx.auth.user?.load('organisations')
+    return ctx.response.ok(ctx.auth.user?.organisations)
   }
 
   public async patch(ctx: HttpContextContract) {
@@ -46,7 +52,7 @@ export default class OrganisationController {
 
     const updated = await organisation.merge(payload).save()
 
-    await ctx.response.ok(updated)
+    return ctx.response.ok(updated)
   }
 
   public async delete(ctx: HttpContextContract) {
@@ -56,7 +62,7 @@ export default class OrganisationController {
     await ctx.bouncer.authorize('patchDeleteOrganisation', organisation)
 
     await organisation.delete()
-    await ctx.response.ok({ message: 'Successfully deleted' })
+    return ctx.response.ok({ message: 'Successfully deleted' })
   }
 
   public async addUser(ctx: HttpContextContract) {
@@ -70,7 +76,7 @@ export default class OrganisationController {
 
     await user.related('organisations').sync([organisation.id], false)
     await organisation.load('users')
-    await ctx.response.ok(organisation)
+    return ctx.response.ok(organisation)
   }
 
   public async removeUser(ctx: HttpContextContract) {
@@ -84,6 +90,6 @@ export default class OrganisationController {
 
     await user.related('organisations').detach([organisation.id])
     await organisation.load('users')
-    await ctx.response.ok(organisation)
+    return ctx.response.ok(organisation)
   }
 }

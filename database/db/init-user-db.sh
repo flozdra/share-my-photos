@@ -76,12 +76,12 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
 
     create table app.organisation_user
     (
-        organisation_id int not null
+        organisation_id integer not null
             constraint organisation_user_organisation_id_fk
-                references app.organisation
+                references app.organisation,
+        user_id         integer
             constraint organisation_user_user_id_fk
-                references app."user",
-        user_id         int
+                references app."user"
     );
 
     COMMIT;

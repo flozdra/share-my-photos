@@ -24,7 +24,7 @@ export default class UserController {
     })
     await ctx.bouncer.authorize('patchDeleteUser', ctx.auth.user!)
     const updated = await ctx.auth?.user?.merge(payload).save()
-    await ctx.response.ok(updated)
+    return ctx.response.ok(updated)
   }
 
   public async delete(ctx: HttpContextContract) {
@@ -34,11 +34,11 @@ export default class UserController {
     await ctx.bouncer.authorize('patchDeleteUser', user)
 
     await ctx.auth.user?.delete()
-    await ctx.response.ok({ message: 'Successfully deleted' })
+    return ctx.response.ok({ message: 'Successfully deleted' })
   }
 
   public async get(ctx: HttpContextContract) {
     const users = await User.query()
-    await ctx.response.ok(users)
+    return ctx.response.ok(users)
   }
 }

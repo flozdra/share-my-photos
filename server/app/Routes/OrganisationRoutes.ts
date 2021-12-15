@@ -6,6 +6,8 @@ Route.get('/organisations/:organisation_id', 'OrganisationController.get')
   .where('organisation_id', Route.matchers.number())
   .middleware('auth')
 
+Route.get('/organisations', 'OrganisationController.getOwnedOrganisations').middleware('auth')
+
 Route.patch('/organisations/:organisation_id', 'OrganisationController.patch')
   .where('organisation_id', Route.matchers.number())
   .middleware('auth')

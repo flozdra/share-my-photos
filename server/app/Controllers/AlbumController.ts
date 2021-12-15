@@ -24,7 +24,7 @@ export default class AlbumController {
       userId: ctx.auth.user?.id,
     })
 
-    await ctx.response.created(createdAlbum)
+    return ctx.response.created(createdAlbum)
   }
 
   public async getAll(ctx: HttpContextContract) {
@@ -34,7 +34,7 @@ export default class AlbumController {
     await ctx.bouncer.authorize('getOrganisation', organisation)
 
     await organisation.load('albums')
-    await ctx.response.ok(organisation.albums)
+    return ctx.response.ok(organisation.albums)
   }
 
   public async get(ctx: HttpContextContract) {
@@ -44,7 +44,7 @@ export default class AlbumController {
     await ctx.bouncer.authorize('getAlbum', album)
 
     await album.load('photos')
-    await ctx.response.ok(album)
+    return ctx.response.ok(album)
   }
 
   public async patch(ctx: HttpContextContract) {
@@ -60,7 +60,7 @@ export default class AlbumController {
     await ctx.bouncer.authorize('patchDeleteAlbum', album)
 
     const updated = await album.merge(payload).save()
-    await ctx.response.ok(updated)
+    return ctx.response.ok(updated)
   }
 
   public async delete(ctx: HttpContextContract) {
@@ -70,6 +70,6 @@ export default class AlbumController {
     await ctx.bouncer.authorize('patchDeleteAlbum', album)
 
     await album.delete()
-    await ctx.response.ok({ message: 'Successfully deleted' })
+    return ctx.response.ok({ message: 'Successfully deleted' })
   }
 }

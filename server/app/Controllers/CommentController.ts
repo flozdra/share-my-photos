@@ -32,7 +32,7 @@ export default class CommentController {
     if (!comment) return ctx.response.notFound({ message: 'Comment not found' })
     await ctx.bouncer.authorize('getComment', comment)
 
-    await ctx.response.ok(comment)
+    return ctx.response.ok(comment)
   }
 
   public async getAll(ctx: HttpContextContract) {
@@ -42,7 +42,7 @@ export default class CommentController {
     await ctx.bouncer.authorize('getPhoto', photo)
 
     await photo.load('comments')
-    await ctx.response.ok(photo.comments)
+    return ctx.response.ok(photo.comments)
   }
 
   public async patch(ctx: HttpContextContract) {
@@ -59,7 +59,7 @@ export default class CommentController {
 
     const updated = await comment.merge(payload).save()
 
-    await ctx.response.ok(updated)
+    return ctx.response.ok(updated)
   }
 
   public async delete(ctx: HttpContextContract) {
@@ -69,6 +69,6 @@ export default class CommentController {
     await ctx.bouncer.authorize('patchDeleteComment', comment)
 
     await comment.delete()
-    await ctx.response.ok({ message: 'Successfully deleted' })
+    return ctx.response.ok({ message: 'Successfully deleted' })
   }
 }
