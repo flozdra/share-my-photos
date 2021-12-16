@@ -17,10 +17,8 @@
     <v-main class="grey lighten-3">
       <v-container>
         <v-row justify="center">
-          <v-col cols="12" sm="10" md="8">
-            <v-sheet min-height="70vh" rounded="lg" class="pa-2">
-              <nuxt></nuxt>
-            </v-sheet>
+          <v-col cols="12" sm="11" lg="10">
+            <nuxt></nuxt>
           </v-col>
         </v-row>
       </v-container>

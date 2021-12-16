@@ -3,21 +3,25 @@
     <v-row>
       <v-col class="d-flex">
         <span class="text-h5 font-weight-black">My organisations</span>
-        <v-spacer></v-spacer>
-        <v-btn small text @click="newOrganisation">
-          <v-icon small left>mdi-plus</v-icon>
-          New organisation
-        </v-btn>
       </v-col>
     </v-row>
     <v-row>
-      <v-col class="pa-0">
-        <ListOrganisations></ListOrganisations>
+      <v-col class="py-0">
+        <v-sheet min-height="70vh" rounded="lg" class="pa-2">
+          <ListOrganisations
+            :organisations="organisations"
+            @new-organisation="newOrganisation"
+            @edit-organisation="editOrganisation"
+          ></ListOrganisations>
+        </v-sheet>
       </v-col>
     </v-row>
 
-    <v-dialog v-model="dialogNewOrganisation" width="350">
-      <AddEditOrganisation @close="closeDialog"></AddEditOrganisation>
+    <v-dialog v-if="dialog" v-model="dialog" max-width="350">
+      <AddEditOrganisation
+        :organisation="organisationSelected"
+        @close="closeDialog"
+      ></AddEditOrganisation>
     </v-dialog>
   </v-container>
 </template>
@@ -29,18 +33,34 @@ export default {
   name: 'HomePage',
   components: { AddEditOrganisation, ListOrganisations },
   layout: 'default',
+  middleware: 'auth',
+  async asyncData({ $axios, error }) {
+    try {
+      const response = await $axios.get(`/api/organisations`)
+      return { organisations: response.data }
+    } catch (e) {
+      return error({ statusCode: 500, message: 'Internal server error' })
+    }
+  },
   data() {
     return {
-      dialogNewOrganisation: false,
+      organisations: [],
+      organisationSelected: null,
+      dialog: false,
     }
   },
   methods: {
-    newOrganisation() {
-      this.dialogNewOrganisation = true
+    async closeDialog(refresh) {
+      this.dialog = false
+      if (refresh) await this.$nuxt.refresh()
     },
-    closeDialog(refresh) {
-      this.dialogNewOrganisation = false
-      if (refresh) window.location.reload()
+    newOrganisation() {
+      this.organisationSelected = null
+      this.dialog = true
+    },
+    editOrganisation(org) {
+      this.organisationSelected = org
+      this.dialog = true
     },
   },
 }

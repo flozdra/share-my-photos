@@ -69,7 +69,7 @@ export default {
     redirect: {
       login: '/',
       logout: '/',
-      callback: '/',
+      callback: '/home',
       home: '/home',
     },
   },
@@ -84,7 +84,7 @@ export default {
   },
   proxy: {
     '/api/': {
-      target: `${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}/`,
+      target: `${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}`,
       pathRewrite: { '^/api/': '' },
       changeOrigin: true,
     },
@@ -111,7 +111,7 @@ export default {
     theme: {
       dark: false,
       themes: {
-        dark: {
+        light: {
           primary: '#3b82f6',
           secondary: '#ec4899',
           info: '#facc15',

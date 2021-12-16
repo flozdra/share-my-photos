@@ -4,20 +4,26 @@
       <v-col class="d-flex">
         <span class="text-h5 font-weight-black">{{ organisation.name }}</span>
         <v-spacer></v-spacer>
-        <v-btn small text @click="newOrganisation">
+        <v-btn small text @click="newAlbum">
           <v-icon small left>mdi-plus</v-icon>
           New album
         </v-btn>
       </v-col>
     </v-row>
     <v-row>
-      <v-col class="pa-0">
-        <ListAlbums></ListAlbums>
+      <v-col class="py-0">
+        <v-sheet min-height="70vh" rounded="lg" class="pa-2">
+          <ListAlbums :albums="albums" @new-album="newAlbum" @edit-album="editAlbum"></ListAlbums>
+        </v-sheet>
       </v-col>
     </v-row>
 
-    <v-dialog v-model="dialogNewOrganisation" width="350">
-      <AddEditAlbum @close="closeDialog"></AddEditAlbum>
+    <v-dialog v-if="dialog" v-model="dialog" max-width="350">
+      <AddEditAlbum
+        :organisation="organisation"
+        :album="albumSelected"
+        @close="closeDialog"
+      ></AddEditAlbum>
     </v-dialog>
   </v-container>
 </template>
@@ -31,8 +37,9 @@ export default {
   layout: 'default',
   async asyncData({ params, $axios, error }) {
     try {
-      const response = await $axios.get(`/api/organisations/${params.id}`)
-      return { organisation: response.data }
+      const organisation = await $axios.get(`/api/organisations/${params.id}`)
+      const albums = await $axios.get(`/api/organisations/${params.id}/albums`)
+      return { organisation: organisation.data, albums: albums.data }
     } catch (e) {
       return error({ statusCode: 404, message: 'Page not found' })
     }
@@ -40,16 +47,24 @@ export default {
   data() {
     return {
       organisation: {},
-      dialogNewOrganisation: false,
+      albums: [],
+      albumSelected: null,
+      dialog: false,
     }
   },
   methods: {
-    newOrganisation() {
-      this.dialogNewOrganisation = true
+    async closeDialog(refresh) {
+      this.dialog = false
+      if (refresh) await this.$nuxt.refresh()
     },
-    closeDialog(refresh) {
-      this.dialogNewOrganisation = false
-      if (refresh) window.location.reload()
+
+    newAlbum() {
+      this.albumSelected = null
+      this.dialog = true
+    },
+    editAlbum(album) {
+      this.albumSelected = album
+      this.dialog = true
     },
   },
 }
