@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema } from '@ioc:Adonis/Core/Validator'
+import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import Organisation from 'App/Models/Organisation'
 import Album from 'App/Models/Album'
 import { DateTime } from 'luxon'
@@ -9,6 +9,7 @@ export default class AlbumController {
     const payload = await ctx.request.validate({
       schema: schema.create({
         name: schema.string(),
+        color: schema.string.optional({}, [rules.regex(/^#[a-fA-F0-9]{8}$/)]),
       }),
     })
 
@@ -19,7 +20,7 @@ export default class AlbumController {
 
     // create an organisation affected to the authenticated user
     const createdAlbum = await organisation.related('albums').create({
-      name: payload.name,
+      ...payload,
       creation: DateTime.now(),
       userId: ctx.auth.user?.id,
     })
@@ -51,6 +52,7 @@ export default class AlbumController {
     const payload = await ctx.request.validate({
       schema: schema.create({
         name: schema.string({}),
+        color: schema.string.optional({}, [rules.regex(/^#[a-fA-F0-9]{8}$/)]),
       }),
     })
 

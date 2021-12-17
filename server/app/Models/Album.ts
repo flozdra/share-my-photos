@@ -51,4 +51,7 @@ export default class Album extends BaseModel {
 
   @column({ columnName: 'user_id' })
   public userId: number
+
+  @column({ columnName: 'color' })
+  public color: string
 }
