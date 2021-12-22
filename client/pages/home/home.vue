@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col class="d-flex">
+      <v-col class="d-flex align-baseline">
         <span class="text-h5 font-weight-black">My organisations</span>
       </v-col>
     </v-row>
@@ -29,6 +29,7 @@
 <script>
 import ListOrganisations from '@/components/Organisation/ListOrganisations'
 import AddEditOrganisation from '@/components/Organisation/AddEditOrganisation'
+
 export default {
   name: 'HomePage',
   components: { AddEditOrganisation, ListOrganisations },

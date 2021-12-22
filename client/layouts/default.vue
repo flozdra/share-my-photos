@@ -2,9 +2,10 @@
   <v-app id="share-my-photos-app">
     <v-app-bar app color="white" flat>
       <v-container v-if="$vuetify.breakpoint.smAndUp" class="py-0 fill-height">
-        <v-avatar class="mr-5" color="primary" size="32"></v-avatar>
-
-        <span class="font-weight-bold">Share my photos</span>
+        <nuxt-link to="/home" style="text-decoration: none; color: inherit">
+          <v-avatar class="mr-5" color="primary" size="32"></v-avatar>
+          <span class="font-weight-bold">Share my photos</span>
+        </nuxt-link>
 
         <v-spacer></v-spacer>
 
@@ -37,8 +38,25 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+/* width */
 ::-webkit-scrollbar {
-  display: none;
+  width: 6px;
+  height: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #bdc2c9;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #9ba2ab;
 }
 </style>

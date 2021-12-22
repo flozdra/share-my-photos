@@ -4,13 +4,14 @@
       <v-col v-for="(org, i) in organisations" :key="i" cols="12" sm="6" md="4" lg="3">
         <v-card
           height="150"
-          class="d-flex flex-column"
+          class="d-flex flex-column org-card"
           :color="org.color"
-          @click="openOrganisation(org)"
+          :to="{ path: `organisations/${org.id}` }"
+          append
         >
           <div style="position: absolute; right: 1px; top: 1px">
-            <v-btn icon @click="editOrganisation($event, org)">
-              <v-icon>mdi-dots-vertical</v-icon>
+            <v-btn icon @click.stop.prevent="$emit('edit-organisation', org)">
+              <v-icon :class="getTextColor(org.color)">mdi-dots-vertical</v-icon>
             </v-btn>
           </div>
           <v-card-title
@@ -62,7 +63,7 @@
           <v-spacer></v-spacer>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <span class="text-caption ml-2">
+            <span class="text-caption font-weight-bold ml-2">
               {{ `Invite people` }}
             </span>
           </v-card-actions>
@@ -101,9 +102,6 @@ export default {
         })
         .slice(0, 3)
     },
-    openOrganisation(org) {
-      this.$router.push({ path: `/home/organisations/${org.id}` })
-    },
     getTextColor(bgColor = '#ffffffff') {
       const color = bgColor.charAt(0) === '#' ? bgColor.substring(1, 7) : bgColor
       const r = parseInt(color.substring(0, 2), 16) // hexToR
@@ -111,12 +109,12 @@ export default {
       const b = parseInt(color.substring(4, 6), 16) // hexToB
       return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? 'black--text' : 'white--text'
     },
-    editOrganisation(e, org) {
-      e.stopPropagation()
-      this.$emit('edit-organisation', org)
-    },
   },
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.org-card {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0%, rgba(255, 255, 255, 0) 60%);
+}
+</style>

@@ -27,7 +27,7 @@
         >
           Register
         </v-btn>
-        <v-icon v-else-if="done" color="success" class="mx-3" large>mdi-check-bold</v-icon>
+        <v-icon v-else-if="done" color="success" class="mx-3" large>mdi-check</v-icon>
         <span v-else-if="error" class="error--text mx-5">Error</span>
       </v-card-actions>
     </v-form>

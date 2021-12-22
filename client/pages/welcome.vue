@@ -92,7 +92,7 @@ import Login from '~/components/Login'
 import Register from '~/components/Register'
 
 export default {
-  name: 'IndexPage',
+  name: 'WelcomePage',
   auth: 'guest',
   components: { Login, Register },
   layout: 'empty',

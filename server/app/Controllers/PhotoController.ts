@@ -15,8 +15,8 @@ export default class PhotoController {
       schema: schema.create({
         name: schema.string(),
         description: schema.string(),
-        tags: schema
-          .array([rules.distinct('*')])
+        tags: schema.array
+          .optional([rules.distinct('*')])
           .members(schema.string.optional({ trim: true, escape: true })),
         file: schema.file({
           size: '100mb',
@@ -69,17 +69,16 @@ export default class PhotoController {
       const photo = await Photo.find(ctx.request.param('photo_id'))
       if (!photo) return ctx.response.notFound({ message: 'Photo not found' })
 
-      switch (ctx.request.accepts(['application/json', 'application/octet-stream'])) {
-        case 'application/json':
-          await photo.load('comments')
-          await photo.load('album')
-          return ctx.response.ok(photo)
-
-        case 'application/octet-stream':
+      switch (ctx.request.accepts(['image/*', 'json'])) {
+        case 'image/*':
           const { size } = await Drive.getStats(photo.url)
           ctx.response.type(extname(photo.url))
           ctx.response.header('content-length', size)
           return ctx.response.stream(await Drive.getStream(photo.url))
+        case 'json':
+          await photo.load('comments')
+          await photo.load('album')
+          return ctx.response.ok(photo)
 
         default:
           return ctx.response.notAcceptable()

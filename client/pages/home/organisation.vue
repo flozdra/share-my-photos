@@ -1,13 +1,8 @@
 <template>
   <v-container>
     <v-row>
-      <v-col class="d-flex">
+      <v-col class="d-flex align-baseline">
         <span class="text-h5 font-weight-black">{{ organisation.name }}</span>
-        <v-spacer></v-spacer>
-        <v-btn small text @click="newAlbum">
-          <v-icon small left>mdi-plus</v-icon>
-          New album
-        </v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -31,14 +26,15 @@
 <script>
 import ListAlbums from '@/components/Album/ListAlbums'
 import AddEditAlbum from '@/components/Album/AddEditAlbum'
+
 export default {
   name: 'OrganisationPage',
   components: { AddEditAlbum, ListAlbums },
   layout: 'default',
   async asyncData({ params, $axios, error }) {
     try {
-      const organisation = await $axios.get(`/api/organisations/${params.id}`)
-      const albums = await $axios.get(`/api/organisations/${params.id}/albums`)
+      const organisation = await $axios.get(`/api/organisations/${params.org_id}`)
+      const albums = await $axios.get(`/api/organisations/${params.org_id}/albums`)
       return { organisation: organisation.data, albums: albums.data }
     } catch (e) {
       return error({ statusCode: 404, message: 'Page not found' })

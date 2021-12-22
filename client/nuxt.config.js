@@ -32,6 +32,7 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    '@nuxtjs/router',
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
@@ -75,6 +76,10 @@ export default {
   },
   router: {
     middleware: ['auth'],
+    routes: [
+      // dynamic segments start with a colon
+      { path: '/user/:id', component: 'HomePage' },
+    ],
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
