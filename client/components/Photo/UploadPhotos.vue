@@ -12,7 +12,6 @@
           counter
           :rules="requiredRule"
         ></v-file-input>
-        <v-text-field v-model="name" :rules="requiredRule" label="Name"></v-text-field>
         <v-text-field
           v-model="description"
           :rules="requiredRule"
@@ -105,7 +104,7 @@ export default {
       try {
         for (const file of this.photos) {
           const formData = new FormData()
-          formData.append('name', this.name)
+          formData.append('name', file.name)
           formData.append('description', this.description)
           for (const tag of this.tags) {
             formData.append('tags[]', tag)

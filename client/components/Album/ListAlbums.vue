@@ -54,7 +54,7 @@ export default {
   methods: {
     getDescription(alb) {
       const plural = (v) => (v > 1 ? 's' : '')
-      return `TODO ${alb.photo_count} photo${plural(alb.photo_count)}`
+      return `${alb.photo_count} photo${plural(alb.photo_count)}`
     },
     getUserAvatars(org) {
       const colors = ['#a11a5c', '#6f0b86', '#0f4ebb', '#14933a']

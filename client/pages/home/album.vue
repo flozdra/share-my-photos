@@ -6,33 +6,12 @@
         <span class="text--secondary text-caption">
           {{ `${photos.length} photos` }}
         </span>
-        <v-spacer></v-spacer>
-        <div class="align-self-end align-self-sm-baseline" style="width: 180px">
-          <v-slider
-            v-model="imgSize"
-            min="80"
-            max="180"
-            step="20"
-            dense
-            :color="album.color"
-            hide-details
-            class="align-center"
-          >
-            <template #prepend><v-icon small :color="album.color">mdi-image</v-icon></template>
-            <template #append><v-icon :color="album.color">mdi-image</v-icon></template>
-          </v-slider>
-        </div>
       </v-col>
     </v-row>
     <v-row>
       <v-col class="py-0">
-        <v-sheet min-height="70vh" rounded="lg" class=" overflow-auto pa-2">
-          <ListPhotos
-            :album="album"
-            :photos="photos"
-            :img-size="imgSize"
-            @upload-photos="dialog = true"
-          ></ListPhotos>
+        <v-sheet min-height="70vh" rounded="lg" class="overflow-auto pa-2">
+          <ListPhotos :album="album" :photos="photos" @upload-photos="dialog = true"></ListPhotos>
         </v-sheet>
       </v-col>
     </v-row>
@@ -52,7 +31,6 @@ export default {
   layout: 'default',
   async asyncData({ params, $axios, error }) {
     try {
-      // const organisation = await $axios.get(`/api/organisations/${params.id}`)
       const album = await $axios.get(`/api/organisations/${params.org_id}/albums/${params.alb_id}`)
       const photos = await $axios.get(`/api/albums/${params.alb_id}/photos`)
       return { album: album.data, photos: photos.data }
@@ -62,11 +40,9 @@ export default {
   },
   data() {
     return {
-      // organisation: {},
       album: {},
       photos: [],
       dialog: false,
-      imgSize: 100,
     }
   },
   methods: {
