@@ -1,23 +1,37 @@
-import { BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  BelongsTo,
+  belongsTo,
+  column,
+  HasMany,
+  hasMany,
+  ModelQueryBuilderContract,
+  scope,
+} from '@ioc:Adonis/Lucid/Orm'
 import Organisation from 'App/Models/Organisation'
 import { DateTime } from 'luxon'
 import User from 'App/Models/User'
 import Photo from 'App/Models/Photo'
+import Database from '@ioc:Adonis/Lucid/Database'
 
-// type Builder = ModelQueryBuilderContract<typeof Album>
+type Builder = ModelQueryBuilderContract<typeof Album>
 
 export default class Album extends BaseModel {
   public static connection = 'pg'
   public static table = 'app.album'
 
-  // public static metadata = scope((query: Builder, id: number) => {
-  //   query
-  //     .where('entity.reseller.id', id)
-  //     .join('entity.client', 'entity.reseller.id', 'entity.client.reseller_id')
-  //     .join('entity.site', 'entity.client.id', 'entity.site.client_id')
-  //     .join('entity.sensor', 'entity.site.id', 'entity.sensor.site_id')
-  //     .select('entity.sensor.id')
-  // })
+  public serializeExtras() {
+    return {
+      photo_count: this.$extras.photo_count,
+    }
+  }
+
+  public static metadata = scope((query: Builder) => {
+    query
+      .leftJoin('app.photo', 'album.id', 'photo.album_id')
+      .select(Database.rawQuery('count(photo.id) as photo_count'))
+      .groupBy('app.album.id')
+  })
 
   @belongsTo(() => Organisation, {
     foreignKey: 'id',

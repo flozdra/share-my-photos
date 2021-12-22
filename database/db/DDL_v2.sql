@@ -1,3 +1,14 @@
+create database share_my_photos
+with owner postgres;
+
+grant connect, create, temporary on database share_my_photos to postgres;
+
+\connect share_my_photos postgres
+
+create schema app;
+
+alter schema app owner to postgres;
+
 create table app."user"
 (
     id        serial

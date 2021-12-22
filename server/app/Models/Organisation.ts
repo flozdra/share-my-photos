@@ -58,6 +58,9 @@ export default class Organisation extends BaseModel {
   @hasMany(() => Album, {
     localKey: 'id',
     foreignKey: 'organisationId',
+    onQuery(query) {
+      query.apply((s) => s.metadata()).select('album.*')
+    },
   })
   public albums: HasMany<typeof Album>
 
