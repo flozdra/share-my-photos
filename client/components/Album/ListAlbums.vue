@@ -56,18 +56,6 @@ export default {
       const plural = (v) => (v > 1 ? 's' : '')
       return `${alb.photo_count} photo${plural(alb.photo_count)}`
     },
-    getUserAvatars(org) {
-      const colors = ['#a11a5c', '#6f0b86', '#0f4ebb', '#14933a']
-
-      return org.users
-        .map((u) => {
-          return {
-            initials: u.firstname[0] + u.lastname[0],
-            color: colors[u.firstname[0].charCodeAt(0) % colors.length],
-          }
-        })
-        .slice(0, 3)
-    },
     getTextColor(bgColor = '#ffffffff') {
       const color = bgColor.charAt(0) === '#' ? bgColor.substring(1, 7) : bgColor
       const r = parseInt(color.substring(0, 2), 16) // hexToR

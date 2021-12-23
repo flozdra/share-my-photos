@@ -8,6 +8,7 @@
         </span>
       </v-col>
     </v-row>
+
     <v-row>
       <v-col class="py-0">
         <v-sheet min-height="70vh" rounded="lg" class="overflow-auto pa-2">
@@ -19,15 +20,31 @@
     <v-dialog v-if="dialog" v-model="dialog" max-width="350">
       <UploadPhotos :album="album" @close="closeDialog"></UploadPhotos>
     </v-dialog>
+
+    <v-dialog v-if="photoView.dialog" v-model="photoView.dialog" @click:outside="exitPhotoView">
+      <v-sheet rounded="lg" class="overflow-auto">
+        <PhotoView :album="album" :photo="photos[photoView.index]"></PhotoView>
+      </v-sheet>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
 import ListPhotos from '@/components/Photo/ListPhotos'
 import UploadPhotos from '@/components/Photo/UploadPhotos'
+import PhotoView from '@/components/Photo/PhotoView'
 export default {
   name: 'AlbumPage',
-  components: { UploadPhotos, ListPhotos },
+  components: { PhotoView, UploadPhotos, ListPhotos },
+  beforeRouteLeave(to, from, next) {
+    if (to.name === 'photo-page') {
+      this.photoView.index = this.photos.findIndex((p) => +p.id === +to.params.photo_id)
+      this.photoView.dialog = true
+      window.history.pushState({}, null, to.path)
+    } else {
+      next()
+    }
+  },
   layout: 'default',
   async asyncData({ params, $axios, error }) {
     try {
@@ -43,12 +60,22 @@ export default {
       album: {},
       photos: [],
       dialog: false,
+      photoView: {
+        dialog: false,
+        photo: null,
+      },
     }
   },
   methods: {
     async closeDialog(refresh) {
       this.dialog = false
       if (refresh) await this.$nuxt.refresh()
+    },
+    exitPhotoView() {
+      this.photoView.photo = null
+      this.photoView.dialog = false
+      // const params = this.$route.params
+      this.$router.go(-1)
     },
   },
 }

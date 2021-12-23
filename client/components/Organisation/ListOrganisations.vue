@@ -27,7 +27,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-avatar
-              v-for="(user, idx) in getUserAvatars(org)"
+              v-for="(user, idx) in org.users.slice(0, 3)"
               :key="idx"
               class="ml-n2"
               :color="user.color"
@@ -89,18 +89,6 @@ export default {
       const p = org.photo_count
       const plural = (v) => (v > 1 ? 's' : '')
       return `${a} album${plural(a)} • ${p} photo${plural(p)}`
-    },
-    getUserAvatars(org) {
-      const colors = ['#a11a5c', '#6f0b86', '#0f4ebb', '#14933a']
-
-      return org.users
-        .map((u) => {
-          return {
-            initials: u.firstname[0] + u.lastname[0],
-            color: colors[u.firstname[0].charCodeAt(0) % colors.length],
-          }
-        })
-        .slice(0, 3)
     },
     getTextColor(bgColor = '#ffffffff') {
       const color = bgColor.charAt(0) === '#' ? bgColor.substring(1, 7) : bgColor

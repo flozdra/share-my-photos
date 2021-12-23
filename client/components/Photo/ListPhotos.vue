@@ -3,6 +3,7 @@
     <v-row>
       <v-col class="d-flex justify-end">
         <v-btn
+          :small="$vuetify.breakpoint.xsOnly"
           :color="album.color"
           :class="getTextColor(album.color)"
           @click="$emit('upload-photos')"
@@ -11,7 +12,10 @@
           Upload
         </v-btn>
         <v-spacer></v-spacer>
-        <div class="align-self-end align-self-sm-baseline" style="width: 150px">
+        <div
+          class="align-self-end align-self-sm-baseline"
+          :style="`width: ${$vuetify.breakpoint.xs ? 140 : 200}px`"
+        >
           <v-slider
             v-model="imgSize"
             min="50"
@@ -22,8 +26,12 @@
             hide-details
             class="align-center"
           >
-            <template #prepend><v-icon small :color="album.color">mdi-image</v-icon></template>
-            <template #append><v-icon :color="album.color">mdi-image</v-icon></template>
+            <template #prepend>
+              <v-icon small :color="album.color" @click="imgSize -= 10">mdi-image</v-icon>
+            </template>
+            <template #append>
+              <v-icon :color="album.color" @click="imgSize += 10">mdi-image</v-icon>
+            </template>
           </v-slider>
         </div>
       </v-col>
@@ -38,22 +46,23 @@
       </v-row>
       <v-row class="mt-0">
         <v-col v-for="(photo, i) in dayPhotos" :key="i" class="flex-grow-0">
-          <v-img
-            :src="getPhotoUrl(photo)"
-            contain
-            :height="imgSize"
-            :width="imgSize"
-            class="d-flex"
-          >
-            <template #placeholder>
-              <v-skeleton-loader
-                class="rounded"
-                type="card"
-                :height="imgSize"
-                :width="imgSize"
-              ></v-skeleton-loader>
-            </template>
-          </v-img>
+          <router-link :to="{ path: `photos/${photo.id}` }" append>
+            <v-img
+              :src="getPhotoUrl(photo)"
+              contain
+              :height="imgSize"
+              :width="imgSize"
+              class="d-flex"
+            >
+              <template #placeholder>
+                <v-skeleton-loader
+                  type="image"
+                  :height="imgSize"
+                  :width="imgSize"
+                ></v-skeleton-loader>
+              </template>
+            </v-img>
+          </router-link>
         </v-col>
       </v-row>
     </div>

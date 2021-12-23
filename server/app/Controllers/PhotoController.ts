@@ -56,7 +56,7 @@ export default class PhotoController {
 
     await ctx.bouncer.authorize('getAlbum', album)
 
-    await album.load('photos', (photo) => photo.preload('comments'))
+    await album.load('photos', (photo) => photo.preload('comments').preload('user'))
     return ctx.response.ok(album.photos)
   }
 
@@ -78,6 +78,7 @@ export default class PhotoController {
         case 'json':
           await photo.load('comments')
           await photo.load('album')
+          await photo.load('user')
           return ctx.response.ok(photo)
 
         default:

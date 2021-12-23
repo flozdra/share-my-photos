@@ -2,6 +2,7 @@ import {
   BaseModel,
   beforeSave,
   column,
+  computed,
   HasMany,
   hasMany,
   ManyToMany,
@@ -10,6 +11,8 @@ import {
 import Hash from '@ioc:Adonis/Core/Hash'
 import Organisation from 'App/Models/Organisation'
 import Album from 'App/Models/Album'
+
+const colors = ['#a11a5c', '#6f0b86', '#0f4ebb', '#14933a']
 
 export default class User extends BaseModel {
   public static connection = 'pg'
@@ -50,5 +53,18 @@ export default class User extends BaseModel {
     if (user.$dirty.password && user.password) {
       user.password = await Hash.make(user.password)
     }
+  }
+
+  @computed()
+  public get fullName() {
+    return this.firstname + ' ' + this.lastname
+  }
+  @computed()
+  public get initials() {
+    return this.firstname[0] + this.lastname[0]
+  }
+  @computed()
+  public get color() {
+    return colors[this.firstname[0].charCodeAt(0) % colors.length]
   }
 }
