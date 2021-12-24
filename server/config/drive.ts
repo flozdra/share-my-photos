@@ -27,7 +27,7 @@ const driveConfig: DriveConfig = {
   | the `DRIVE_DISK` environment variable.
   |
   */
-  disk: 's3',
+  disk: Env.get('DRIVE_DISK'),
 
   disks: {
     /*

@@ -43,10 +43,10 @@ export default class User extends BaseModel {
   public lastname: string
 
   @column({ columnName: 'password', serializeAs: null })
-  public password: string | null
+  public password: string | undefined
 
   @column({ columnName: 'remember_me_token' })
-  public rememberMeToken: boolean
+  public rememberMeToken: string
 
   @beforeSave()
   public static async hashPasswordEncrypt(user: User) {
