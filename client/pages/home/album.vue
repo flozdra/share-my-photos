@@ -21,7 +21,12 @@
       <UploadPhotos :album="album" @close="closeDialog"></UploadPhotos>
     </v-dialog>
 
-    <v-dialog v-if="photoView.dialog" v-model="photoView.dialog" @click:outside="exitPhotoView">
+    <v-dialog
+      v-if="photoView.dialog"
+      v-model="photoView.dialog"
+      width="unset"
+      @click:outside="exitPhotoView"
+    >
       <v-sheet rounded="lg" class="overflow-auto">
         <PhotoView :album="album" :photo="photos[photoView.index]"></PhotoView>
       </v-sheet>

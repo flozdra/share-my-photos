@@ -9,6 +9,7 @@ import { extname } from 'path'
 const { v4: uuidv4 } = require('uuid')
 
 export default class PhotoController {
+
   public async create(ctx: HttpContextContract) {
     await ctx.auth.user?.load('organisations')
     const payload = await ctx.request.validate({
