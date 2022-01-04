@@ -1,9 +1,18 @@
 <template>
   <v-container>
     <v-row>
-      <v-col class='d-flex align-baseline flex-column flex-sm-row'>
-        <span class='text-h5 font-weight-black mr-3'>{{ album.name }}</span>
-        <span class='text--secondary text-caption'>
+      <v-col class="d-flex align-baseline">
+        <v-btn
+          icon
+          small
+          color="transparent"
+          class="mr-4"
+          :to="`/home/organisations/${$route.params.org_id}`"
+        >
+          <v-icon color="black">mdi-arrow-left</v-icon>
+        </v-btn>
+        <span class="text-h5 font-weight-black mr-3">{{ album.name }}</span>
+        <span class="text--secondary text-caption">
           {{ `${photos.length} photos` }}
         </span>
         <v-spacer />

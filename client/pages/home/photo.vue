@@ -1,6 +1,24 @@
 <template>
   <v-container>
     <v-row>
+      <v-col class="d-flex align-baseline">
+        <v-btn
+          icon
+          small
+          color="transparent"
+          class="mr-4"
+          :to="`/home/organisations/${$route.params.org_id}/albums/${$route.params.alb_id}`"
+        >
+          <v-icon color="black">mdi-arrow-left</v-icon>
+        </v-btn>
+        <span class="text-h5 font-weight-black mr-3">{{ album.name }}</span>
+        <span class="text--secondary text-caption">
+          {{ `${album.photos.length} photos` }}
+        </span>
+      </v-col>
+    </v-row>
+
+    <v-row>
       <v-col class="py-0">
         <v-sheet rounded="lg" class="overflow-auto">
           <PhotoView :album="album" :photo="photo"></PhotoView>

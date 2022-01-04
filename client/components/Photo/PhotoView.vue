@@ -1,94 +1,200 @@
 <template>
-  <div class="photo-view">
-    <div class="photo-section">
-      <v-img :src="photoUrl" contain>
-        <template #placeholder>
-          <div class="d-flex fill-height align-center justify-center">
-            <v-progress-circular indeterminate color="secondary" size="60"></v-progress-circular>
-          </div>
-        </template>
-      </v-img>
-    </div>
-    <div class="comment-section">
-      <div class="ma-2 px-2">
-        <v-avatar :color="photo.user.color" size="30" class="my-1">
-          <span class="white--text text-body-2">{{ photo.user.initials }}</span>
-        </v-avatar>
-        <span class="font-weight-medium text-body-2 ml-2">
-          {{ photo.user.fullName }}
-        </span>
-      </div>
-      <v-divider></v-divider>
-
-      <div class="ma-2 px-2">
-        <span class="text-body-2">
-          {{ photo.description }}
-        </span>
-        <v-chip-group column>
-          <v-chip v-for="tag in photo.tags" :key="tag" small active-class="null">
-            {{ tag }}
-          </v-chip>
-        </v-chip-group>
-        <span class="text-caption text--secondary">
-          {{ formattedDate }}
-        </span>
-      </div>
-      <v-divider></v-divider>
-
-      <div class="ma-2 px-2">
-        <span class="text-caption text--secondary">Comments</span>
-      </div>
-      <div class="list-comments">
-        <div v-for="(comm, i) of photo.comments" :key="i" class="ma-2 px-2 d-flex">
-          <v-avatar :color="photo.user.color" size="24" class="my-1">
-            <span class="white--text text-caption">{{ photo.user.initials }}</span>
+  <v-container fluid>
+    <v-row v-if="$vuetify.breakpoint.xs">
+      <v-col cols="12">
+        <div>
+          <v-avatar :color="photo.user.color" size="30" class="my-1">
+            <span class="white--text text-body-2">{{ photo.user.initials }}</span>
           </v-avatar>
-          <div class="ml-2 d-flex flex-column">
-            <span class="text-caption">
-              <span class="font-weight-bold mr-1">
-                {{ 'Florian Zdrada' }}
-              </span>
-              {{ comm.text }}
-            </span>
-            <span class="text--secondary" style="font-size: 10px">
-              {{ formatDate(comm.creation) }}
-            </span>
-          </div>
+          <span class="font-weight-medium text-body-2 ml-2">
+            {{ photo.user.fullName }}
+          </span>
         </div>
-
-        <span v-if="photo.comments.length === 0" class="mx-2 px-2 text-caption">
-          There are no comments.
-        </span>
-      </div>
-      <v-divider></v-divider>
-
-      <div class="ma-2 px-2 d-flex align-center">
-        <v-text-field
-          v-model="comment"
-          class="text-body-2 pa-0 my-1 align-center"
-          hide-details
-          persistent-placeholder
-          :readonly="loading"
-          placeholder="Add a comment"
-          @keydown.enter="postComment"
-        >
-          <template #prepend>
-            <v-icon size="18">mdi-comment-processing</v-icon>
+      </v-col>
+      <v-col cols=12 class="black pa-0">
+        <v-img :src="photoUrl" max-height="250" contain>
+          <template #placeholder>
+            <div class="d-flex fill-height align-center justify-center">
+              <v-progress-circular indeterminate color="secondary" size="60"></v-progress-circular>
+            </div>
           </template>
-        </v-text-field>
-        <v-btn
-          small
-          :disabled="!comment"
-          :loading="loading"
-          color="primary"
-          class="ml-2"
-          @click="postComment"
+        </v-img>
+      </v-col>
+      <v-col
+        class="pa-0 d-flex flex-column"
+        :style="`max-height: ${$vuetify.breakpoint.xs ? undefined : 500}px`"
+      >
+        <v-divider></v-divider>
+
+        <div class="ma-2 px-2">
+          <span class="text-body-2">
+            {{ photo.description }}
+          </span>
+          <v-chip-group column>
+            <v-chip v-for="tag in photo.tags" :key="tag" small active-class="null">
+              {{ tag }}
+            </v-chip>
+          </v-chip-group>
+          <span class="text-caption text--secondary">
+            {{ formattedDate }}
+          </span>
+        </div>
+        <v-divider></v-divider>
+
+        <div class="ma-2 px-2">
+          <span class="text-caption text--secondary">Comments</span>
+        </div>
+        <div
+          class="flex-grow-1 overflow-auto"
+          :style="`max-height: ${$vuetify.breakpoint.xs ? 150 : undefined}px`"
         >
-          Post
-        </v-btn>
-      </div>
-    </div>
-  </div>
+          <div v-for="(comm, i) of photo.comments" :key="i" class="ma-2 px-2 d-flex">
+            <v-avatar :color="photo.user.color" size="24" class="my-1">
+              <span class="white--text text-caption">{{ photo.user.initials }}</span>
+            </v-avatar>
+            <div class="ml-2 d-flex flex-column">
+              <span class="text-caption">
+                <span class="font-weight-bold mr-1">
+                  {{ 'Florian Zdrada' }}
+                </span>
+                {{ comm.text }}
+              </span>
+              <span class="text--secondary" style="font-size: 10px">
+                {{ formatDate(comm.creation) }}
+              </span>
+            </div>
+          </div>
+
+          <span v-if="photo.comments.length === 0" class="mx-2 px-2 text-caption">
+            There are no comments.
+          </span>
+        </div>
+        <v-divider></v-divider>
+
+        <div class="ma-2 px-2 d-flex align-end">
+          <v-text-field
+            v-model="comment"
+            class="text-body-2 pa-0 my-1 align-center"
+            hide-details
+            persistent-placeholder
+            :readonly="loading"
+            placeholder="Add a comment"
+            @keydown.enter="postComment"
+          >
+            <template #prepend>
+              <v-icon size="18">mdi-comment-processing</v-icon>
+            </template>
+          </v-text-field>
+          <v-btn
+            small
+            :disabled="!comment"
+            :loading="loading"
+            color="primary"
+            class="ml-2"
+            @click="postComment"
+          >
+            Post
+          </v-btn>
+        </div>
+      </v-col>
+    </v-row>
+    <v-row v-else>
+      <v-col class="black pa-0 d-flex align-center">
+        <v-img :src="photoUrl" height="400" width="400" contain>
+          <template #placeholder>
+            <div class="d-flex fill-height align-center justify-center">
+              <v-progress-circular indeterminate color="secondary" size="60"></v-progress-circular>
+            </div>
+          </template>
+        </v-img>
+      </v-col>
+      <v-col
+        class="pa-0 d-flex flex-column"
+        :style="`max-height: ${$vuetify.breakpoint.xs ? undefined : 500}px`"
+      >
+        <div class="ma-2 px-2">
+          <v-avatar :color="photo.user.color" size="30" class="my-1">
+            <span class="white--text text-body-2">{{ photo.user.initials }}</span>
+          </v-avatar>
+          <span class="font-weight-medium text-body-2 ml-2">
+            {{ photo.user.fullName }}
+          </span>
+        </div>
+        <v-divider></v-divider>
+
+        <div class="ma-2 px-2">
+          <span class="text-body-2">
+            {{ photo.description }}
+          </span>
+          <v-chip-group column>
+            <v-chip v-for="tag in photo.tags" :key="tag" small active-class="null">
+              {{ tag }}
+            </v-chip>
+          </v-chip-group>
+          <span class="text-caption text--secondary">
+            {{ formattedDate }}
+          </span>
+        </div>
+        <v-divider></v-divider>
+
+        <div class="ma-2 px-2">
+          <span class="text-caption text--secondary">Comments</span>
+        </div>
+        <div
+          class="flex-grow-1 overflow-auto"
+          :style="`max-height: ${$vuetify.breakpoint.xs ? 150 : undefined}px`"
+        >
+          <div v-for="(comm, i) of photo.comments" :key="i" class="ma-2 px-2 d-flex">
+            <v-avatar :color="photo.user.color" size="24" class="my-1">
+              <span class="white--text text-caption">{{ photo.user.initials }}</span>
+            </v-avatar>
+            <div class="ml-2 d-flex flex-column">
+              <span class="text-caption">
+                <span class="font-weight-bold mr-1">
+                  {{ 'Florian Zdrada' }}
+                </span>
+                {{ comm.text }}
+              </span>
+              <span class="text--secondary" style="font-size: 10px">
+                {{ formatDate(comm.creation) }}
+              </span>
+            </div>
+          </div>
+
+          <span v-if="photo.comments.length === 0" class="mx-2 px-2 text-caption">
+            There are no comments.
+          </span>
+        </div>
+        <v-divider></v-divider>
+
+        <div class="ma-2 px-2 d-flex align-end">
+          <v-text-field
+            v-model="comment"
+            class="text-body-2 pa-0 my-1 align-center"
+            hide-details
+            persistent-placeholder
+            :readonly="loading"
+            placeholder="Add a comment"
+            @keydown.enter="postComment"
+          >
+            <template #prepend>
+              <v-icon size="18">mdi-comment-processing</v-icon>
+            </template>
+          </v-text-field>
+          <v-btn
+            small
+            :disabled="!comment"
+            :loading="loading"
+            color="primary"
+            class="ml-2"
+            @click="postComment"
+          >
+            Post
+          </v-btn>
+        </div>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -141,24 +247,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.photo-view {
-  display: flex;
-  max-height: 400px;
-}
-.photo-section {
-  display: flex;
-  flex-grow: 0;
-}
-.comment-section {
-  display: flex;
-  flex-direction: column;
-  max-width: 300px;
-  max-height: inherit;
-}
-.list-comments {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  min-height: 0;
-}
-</style>
+<style scoped></style>

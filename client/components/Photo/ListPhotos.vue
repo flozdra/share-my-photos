@@ -67,7 +67,7 @@
       </v-row>
     </div>
 
-    <v-row v-if="groupedByDay.length === 0">
+    <v-row v-if="Object.keys(groupedByDay).length === 0">
       <v-col>
         <span>You have no photos in this album.</span>
       </v-col>

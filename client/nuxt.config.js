@@ -74,13 +74,14 @@ export default {
       home: '/home',
     },
   },
-  router: {
-    middleware: ['auth'],
-    routes: [
-      // dynamic segments start with a colon
-      { path: '/user/:id', component: 'HomePage' },
-    ],
-  },
+
+  // router: {
+  //   middleware: ['auth'],
+  //   routes: [
+  //     // dynamic segments start with a colon
+  //     { path: '/user/:id', component: 'HomePage' },
+  //   ],
+  // },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {

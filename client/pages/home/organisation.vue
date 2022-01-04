@@ -2,7 +2,44 @@
   <v-container>
     <v-row>
       <v-col class="d-flex align-baseline">
+        <v-btn icon small color="transparent" class="mr-4" to="/home">
+          <v-icon color="black">mdi-arrow-left</v-icon>
+        </v-btn>
         <span class="text-h5 font-weight-black">{{ organisation.name }}</span>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <div class="pa-1 d-flex overflow-auto" style="gap: 15px">
+          <div class="d-flex flex-column">
+            <div
+              v-ripple
+              class="avatar"
+              style="cursor: pointer; background-color: #eeeeee; border: 0"
+              @click="addPeople.dialog = true"
+            >
+              <span class="white--text font-weight-medium"><v-icon>mdi-plus</v-icon></span>
+            </div>
+            <span
+              class="text-center mt-1 text-truncate"
+              style="user-select: none; width: 45px; font-size: 10px"
+            >
+              Invite
+            </span>
+          </div>
+
+          <div
+            v-for="(user, idx) in organisation.users"
+            :key="idx"
+            class="d-flex flex-column"
+            style="user-select: none"
+          >
+            <div class="avatar" :style="`background-color: ${user.color}`">
+              <span class="white--text font-weight-medium">{{ user.initials }}</span>
+            </div>
+            <span class="text-center mt-1" style="font-size: 10px">{{ user.firstname }}</span>
+          </div>
+        </div>
       </v-col>
     </v-row>
     <v-row>
@@ -13,12 +50,16 @@
       </v-col>
     </v-row>
 
-    <v-dialog v-if="dialog" v-model="dialog" max-width="350">
+    <v-dialog v-if="addEditAlbuum.dialog" v-model="addEditAlbuum.dialog" max-width="350">
       <AddEditAlbum
         :organisation="organisation"
         :album="albumSelected"
         @close="closeDialog"
       ></AddEditAlbum>
+    </v-dialog>
+
+    <v-dialog v-if="addPeople.dialog" v-model="addPeople.dialog" max-width="350">
+      <AddPeople :organisation="organisation" @close="closeDialog"></AddPeople>
     </v-dialog>
   </v-container>
 </template>
@@ -26,15 +67,17 @@
 <script>
 import ListAlbums from '@/components/Album/ListAlbums'
 import AddEditAlbum from '@/components/Album/AddEditAlbum'
+import AddPeople from '@/components/Organisation/AddPeople'
 
 export default {
   name: 'OrganisationPage',
-  components: { AddEditAlbum, ListAlbums },
+  components: { AddPeople, AddEditAlbum, ListAlbums },
   layout: 'default',
   async asyncData({ params, $axios, error }) {
     try {
       const organisation = await $axios.get(`/api/organisations/${params.org_id}`)
       const albums = await $axios.get(`/api/organisations/${params.org_id}/albums`)
+
       return { organisation: organisation.data, albums: albums.data }
     } catch (e) {
       return error({ statusCode: 404, message: 'Page not found' })
@@ -45,25 +88,43 @@ export default {
       organisation: {},
       albums: [],
       albumSelected: null,
-      dialog: false,
+      addEditAlbuum: {
+        dialog: false,
+      },
+      addPeople: {
+        dialog: false,
+      },
     }
   },
   methods: {
     async closeDialog(refresh) {
-      this.dialog = false
+      this.addEditAlbuum.dialog = false
+      this.addPeople.dialog = false
       if (refresh) await this.$nuxt.refresh()
     },
 
     newAlbum() {
       this.albumSelected = null
-      this.dialog = true
+      this.addEditAlbuum.dialog = true
     },
     editAlbum(album) {
       this.albumSelected = album
-      this.dialog = true
+      this.addEditAlbuum.dialog = true
     },
   },
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.avatar {
+  user-focus: none;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border: solid 2px #eeeeee;
+  outline: solid 1px #808080;
+}
+</style>

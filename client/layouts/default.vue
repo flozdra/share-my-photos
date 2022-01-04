@@ -1,16 +1,28 @@
 <template>
   <v-app id="share-my-photos-app">
-    <v-app-bar app color="white" flat>
+    <v-app-bar app color="#03224A" flat>
       <v-container v-if="$vuetify.breakpoint.smAndUp" class="py-0 fill-height">
         <nuxt-link to="/home" style="text-decoration: none; color: inherit">
-          <v-avatar class="mr-5" color="primary" size="32"></v-avatar>
-          <span class="font-weight-bold">Share my photos</span>
+          <div class="d-flex align-center">
+            <v-img
+              src="/share-my-photo-logo-light.svg"
+              :width="$vuetify.breakpoint.smAndDown ? 40 : 40"
+              contain
+            />
+            <span class="ml-3 font-weight-bold white--text">Share my photos</span>
+          </div>
         </nuxt-link>
 
         <v-spacer></v-spacer>
 
         <v-responsive max-width="260">
-          <v-text-field dense flat hide-details rounded solo-inverted></v-text-field>
+          <v-text-field
+            class="text-caption"
+            rounded
+            placeholder="Search album, photo, ..."
+            hide-details
+            background-color="shade"
+          ></v-text-field>
         </v-responsive>
       </v-container>
     </v-app-bar>

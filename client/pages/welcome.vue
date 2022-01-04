@@ -18,6 +18,12 @@
         }"
       >
         <div class="text-center">
+          <v-img
+            src="/share-my-photo-logo.svg"
+            :height="$vuetify.breakpoint.smAndDown ? 100 : 150"
+            contain
+            class="mb-4"
+          />
           <span class="text-h4 text-sm-h3 font-weight-black black--text">Share my photos</span>
           <br />
           <span class="d-block mt-2 text-subtitle-1 black--text">
@@ -31,14 +37,11 @@
             <template #default="{ hover }">
               <v-card
                 :elevation="hover ? 12 : 3"
-                class="my-3 transition-swing"
+                class="my-3 py-3 transition-swing"
                 max-width="400"
                 @click="show = 'login'"
               >
                 <v-list-item>
-                  <v-list-item-avatar size="100">
-                    <v-img src="/login-icon.svg" alt="login-img"></v-img>
-                  </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title class="text-h5 font-weight-bold">Login</v-list-item-title>
                     <v-list-item-subtitle style="white-space: normal">
@@ -54,14 +57,11 @@
             <template #default="{ hover }">
               <v-card
                 :elevation="hover ? 12 : 3"
-                class="my-3 transition-swing"
+                class="my-3 py-3 transition-swing"
                 max-width="400"
                 @click="show = 'register'"
               >
                 <v-list-item>
-                  <v-list-item-avatar size="100">
-                    <v-img src="/register-icon.svg" alt="login-img"></v-img>
-                  </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title class="text-h5 font-weight-bold">Register</v-list-item-title>
                     <v-list-item-subtitle style="white-space: normal">

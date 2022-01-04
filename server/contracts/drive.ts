@@ -10,7 +10,7 @@ declare module '@ioc:Adonis/Core/Drive' {
     // local: {
     //   config: LocalDriverConfig
     //   implementation: LocalDriverContract
-    // }
+    // }w
     s3: {
       config: S3DriverConfig
       implementation: S3DriverContract
