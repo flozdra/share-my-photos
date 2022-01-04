@@ -1,34 +1,36 @@
 <template>
   <v-container>
     <v-row>
-      <v-col class="d-flex align-baseline flex-column flex-sm-row">
-        <span class="text-h5 font-weight-black mr-3">{{ album.name }}</span>
-        <span class="text--secondary text-caption">
+      <v-col class='d-flex align-baseline flex-column flex-sm-row'>
+        <span class='text-h5 font-weight-black mr-3'>{{ album.name }}</span>
+        <span class='text--secondary text-caption'>
           {{ `${photos.length} photos` }}
         </span>
+        <v-spacer />
+        <v-btn :to='{path:"slideshow"}' append>Slideshow</v-btn>
       </v-col>
     </v-row>
 
     <v-row>
-      <v-col class="py-0">
-        <v-sheet min-height="70vh" rounded="lg" class="overflow-auto pa-2">
-          <ListPhotos :album="album" :photos="photos" @upload-photos="dialog = true"></ListPhotos>
+      <v-col class='py-0'>
+        <v-sheet min-height='70vh' rounded='lg' class='overflow-auto pa-2'>
+          <ListPhotos :album='album' :photos='photos' @upload-photos='dialog = true'></ListPhotos>
         </v-sheet>
       </v-col>
     </v-row>
 
-    <v-dialog v-if="dialog" v-model="dialog" max-width="350">
-      <UploadPhotos :album="album" @close="closeDialog"></UploadPhotos>
+    <v-dialog v-if='dialog' v-model='dialog' max-width='350'>
+      <UploadPhotos :album='album' @close='closeDialog'></UploadPhotos>
     </v-dialog>
 
     <v-dialog
-      v-if="photoView.dialog"
-      v-model="photoView.dialog"
-      width="unset"
-      @click:outside="exitPhotoView"
+      v-if='photoView.dialog'
+      v-model='photoView.dialog'
+      width='unset'
+      @click:outside='exitPhotoView'
     >
-      <v-sheet rounded="lg" class="overflow-auto">
-        <PhotoView :album="album" :photo="photos[photoView.index]"></PhotoView>
+      <v-sheet rounded='lg' class='overflow-auto'>
+        <PhotoView :album='album' :photo='photos[photoView.index]'></PhotoView>
       </v-sheet>
     </v-dialog>
   </v-container>
@@ -38,6 +40,7 @@
 import ListPhotos from '@/components/Photo/ListPhotos'
 import UploadPhotos from '@/components/Photo/UploadPhotos'
 import PhotoView from '@/components/Photo/PhotoView'
+
 export default {
   name: 'AlbumPage',
   components: { PhotoView, UploadPhotos, ListPhotos },
