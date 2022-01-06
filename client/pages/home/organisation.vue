@@ -50,7 +50,7 @@
       </v-col>
     </v-row>
 
-    <v-dialog v-if="addEditAlbuum.dialog" v-model="addEditAlbuum.dialog" max-width="350">
+    <v-dialog v-if="addEditAlbum.dialog" v-model="addEditAlbum.dialog" max-width="350">
       <AddEditAlbum
         :organisation="organisation"
         :album="albumSelected"
@@ -88,7 +88,7 @@ export default {
       organisation: {},
       albums: [],
       albumSelected: null,
-      addEditAlbuum: {
+      addEditAlbum: {
         dialog: false,
       },
       addPeople: {
@@ -98,18 +98,18 @@ export default {
   },
   methods: {
     async closeDialog(refresh) {
-      this.addEditAlbuum.dialog = false
+      this.addEditAlbum.dialog = false
       this.addPeople.dialog = false
       if (refresh) await this.$nuxt.refresh()
     },
 
     newAlbum() {
       this.albumSelected = null
-      this.addEditAlbuum.dialog = true
+      this.addEditAlbum.dialog = true
     },
     editAlbum(album) {
       this.albumSelected = album
-      this.addEditAlbuum.dialog = true
+      this.addEditAlbum.dialog = true
     },
   },
 }

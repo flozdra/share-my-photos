@@ -50,7 +50,11 @@
     >
       <v-sheet rounded="lg" class="overflow-auto">
         <ClientOnly>
-          <PhotoView :album="album" :photo="photos[photoView.index]"></PhotoView>
+          <PhotoView
+            :album="album"
+            :photo="photos[photoView.index]"
+            @close="exitPhotoView"
+          ></PhotoView>
         </ClientOnly>
       </v-sheet>
     </v-dialog>

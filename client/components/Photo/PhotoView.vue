@@ -2,13 +2,15 @@
   <v-container fluid>
     <v-row v-if="$vuetify.breakpoint.xs">
       <v-col cols="12" class="py-2">
-        <div>
+        <div class="d-flex align-center">
           <v-avatar :color="photo.user.color" size="30" class="my-1">
             <span class="white--text text-body-2">{{ photo.user.initials }}</span>
           </v-avatar>
           <span class="font-weight-medium text-body-2 ml-2">
             {{ photo.user.fullName }}
           </span>
+          <v-spacer></v-spacer>
+          <v-icon @click="dialog = true">mdi-pencil</v-icon>
         </div>
       </v-col>
       <v-col cols="12" class="black pa-0">
@@ -101,12 +103,7 @@
     </v-row>
     <v-row v-else>
       <v-col class="black pa-0 d-flex align-center">
-        <v-img
-          :src="photoUrl"
-          :height="$vuetify.breakpoint.sm ? 400 : 700"
-          :width="$vuetify.breakpoint.sm ? 400 : 700"
-          contain
-        >
+        <v-img :src="photoUrl" :height="photoSize" :width="photoSize" contain>
           <template #placeholder>
             <div class="d-flex fill-height align-center justify-center">
               <v-progress-circular indeterminate color="secondary" size="60"></v-progress-circular>
@@ -114,17 +111,16 @@
           </template>
         </v-img>
       </v-col>
-      <v-col
-        class="pa-0 d-flex flex-column"
-        :style="`height: ${$vuetify.breakpoint.sm ? 400 : 700}px`"
-      >
-        <div class="ma-2 px-2">
+      <v-col class="pa-0 d-flex flex-column" :style="`height: ${photoSize}px`">
+        <div class="ma-2 px-2 d-flex align-center">
           <v-avatar :color="photo.user.color" size="30" class="my-1">
             <span class="white--text text-body-2">{{ photo.user.initials }}</span>
           </v-avatar>
           <span class="font-weight-medium text-body-2 ml-2">
             {{ photo.user.fullName }}
           </span>
+          <v-spacer></v-spacer>
+          <v-icon @click="dialog = true">mdi-pencil</v-icon>
         </div>
         <v-divider></v-divider>
 
@@ -197,14 +193,20 @@
         </div>
       </v-col>
     </v-row>
+
+    <v-dialog v-if="dialog" v-model="dialog" max-width="350">
+      <EditPhoto :album="album" :photo="photo" @close="closeDialog"></EditPhoto>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
 import { DateTime } from 'luxon'
+import EditPhoto from '@/components/Photo/EditPhoto'
 
 export default {
   name: 'PhotoView',
+  components: { EditPhoto },
   props: {
     album: {
       type: Object,
@@ -219,6 +221,7 @@ export default {
     return {
       comment: '',
       loading: false,
+      dialog: false,
     }
   },
   computed: {
@@ -228,9 +231,19 @@ export default {
     formattedDate() {
       return DateTime.fromISO(this.photo.creation).toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)
     },
-
+    photoSize() {
+      return this.$vuetify.breakpoint.sm ? 400 : this.$vuetify.breakpoint.md ? 500 : 600
+    },
   },
   methods: {
+    async closeDialog(refresh, deleted) {
+      this.dialog = false
+      if (deleted) {
+        this.$router.go(-1)
+      }
+      if (refresh) await this.$nuxt.refresh()
+    },
+
     async postComment() {
       this.loading = true
       try {

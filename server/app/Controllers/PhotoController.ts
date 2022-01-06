@@ -97,7 +97,6 @@ export default class PhotoController {
   public async patch(ctx: HttpContextContract) {
     const payload = await ctx.request.validate({
       schema: schema.create({
-        name: schema.string(),
         description: schema.string(),
         tags: schema
           .array([rules.distinct('*')])

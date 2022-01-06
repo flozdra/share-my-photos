@@ -1,0 +1,136 @@
+<template>
+  <v-card>
+    <v-card-title class="text-h5 font-weight-bold">Edit photo</v-card-title>
+    <v-form ref="form" v-model="formValid" lazy-validation autocomplete="off">
+      <v-card-text>
+        <v-text-field
+          v-model="description"
+          :rules="requiredRule"
+          label="Description"
+        ></v-text-field>
+
+        <v-combobox
+          v-model="tags"
+          label="Add tags"
+          multiple
+          small-chips
+          deletable-chips
+          clearable
+        ></v-combobox>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn text color="error" class="px-3" @click="delete_.dialog = true">Delete</v-btn>
+        <v-spacer></v-spacer>
+        <v-btn text class="px-3" @click="$emit('close', done)">Close</v-btn>
+        <v-btn
+          v-if="!done && !error"
+          class="px-3"
+          :loading="loading"
+          :disabled="loading"
+          color="primary"
+          @click="submit"
+        >
+          Edit
+        </v-btn>
+        <v-icon v-else-if="done" color="success" class="mx-3" large>mdi-check</v-icon>
+        <span v-else-if="error" class="error--text mx-5">Error</span>
+      </v-card-actions>
+    </v-form>
+
+    <v-dialog v-model="delete_.dialog" max-width="300">
+      <v-card>
+        <v-card-title class="text-h5 font-weight-bold">Warning</v-card-title>
+        <v-card-text>Are you sure you want to delete this photo?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+            class="px-3"
+            @click="delete_.done ? $emit('close', true, delete_.done) : (delete_.dialog = false)"
+          >
+            Close
+          </v-btn>
+          <v-btn
+            v-if="!delete_.done && !delete_.error"
+            class="error px-3"
+            :loading="delete_.loading"
+            :disabled="delete_.loading"
+            color="primary"
+            @click="deletePhoto"
+          >
+            Delete
+          </v-btn>
+          <v-icon v-else-if="delete_.done" color="success" class="mx-3" large>mdi-check</v-icon>
+          <span v-else-if="delete_.error" class="error--text mx-5">Error</span>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-card>
+</template>
+
+<script>
+export default {
+  name: 'EditPhoto',
+  props: {
+    album: {
+      type: Object,
+      default: null,
+    },
+    photo: {
+      type: Object,
+      default: null,
+    },
+  },
+  data() {
+    return {
+      formValid: false,
+      requiredRule: [(v) => !!v || 'Required!'],
+      loading: false,
+      description: '',
+      tags: [],
+      done: false,
+      error: false,
+      delete_: {
+        dialog: false,
+        loading: false,
+        error: false,
+        done: false,
+      },
+    }
+  },
+  mounted() {
+    this.description = this.photo.description
+    this.tags = this.photo.tags
+  },
+  methods: {
+    async submit() {
+      await this.$refs.form.validate()
+      if (!this.formValid) return
+      this.loading = true
+      try {
+        await this.$axios.patch(`/api/albums/${this.album.id}/photos/${this.photo.id}`, {
+          description: this.description,
+          tags: this.tags,
+        })
+
+        this.done = true
+      } catch (e) {
+        this.error = true
+      }
+      this.loading = false
+    },
+    async deletePhoto() {
+      this.delete_.loading = true
+      try {
+        await this.$axios.delete(`/api/albums/${this.album.id}/photos/${this.photo.id}`)
+        this.delete_.done = true
+      } catch (e) {
+        this.delete_.error = true
+      }
+      this.delete_.loading = false
+    },
+  },
+}
+</script>
+
+<style scoped></style>
