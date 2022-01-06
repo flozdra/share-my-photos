@@ -11,5 +11,8 @@ Ws.io.on('connection', (socket) => {
     socket.on('imageChangeServer', function (photo) {
       socket.in(room).emit('imageChangeClient', photo)
     })
+    socket.on('refresh', function () {
+      socket.in(room).emit('refresh')
+    })
   })
 })

@@ -1,9 +1,53 @@
 <template>
   <v-container>
     <v-row>
-      <v-col class='py-0'>
-        <v-sheet rounded='lg' class='overflow-auto'>
-          <SlideShow :album='album' :photos='photos'></SlideShow>
+      <v-col class="d-flex align-baseline">
+        <v-btn
+          icon
+          small
+          color="transparent"
+          class="mr-4"
+          :to="`/home/organisations/${$route.params.org_id}/albums/${$route.params.alb_id}`"
+        >
+          <v-icon color="black">mdi-arrow-left</v-icon>
+        </v-btn>
+        <span class="text-h5 font-weight-black mr-3">Slideshow</span>
+        <span class="text-h6 font-weight-light mr-3">{{ album.name }}</span>
+        <span v-if="$vuetify.breakpoint.smAndUp" class="text--secondary text-caption">
+          {{ `${album.photos.length} photos` }}
+        </span>
+        <v-spacer></v-spacer>
+        <div v-if="$vuetify.breakpoint.smAndUp">
+          <v-btn text outlined small class="mr-3" @click="changeImagePrevious">Previous</v-btn>
+          <v-btn text outlined small @click="changeImageNext">Next</v-btn>
+        </div>
+      </v-col>
+      <v-col v-if="$vuetify.breakpoint.xsOnly" cols="12" class="d-flex align-baseline pt-0">
+        <div>
+          <v-btn text outlined small class="mr-3" @click="changeImagePrevious">Previous</v-btn>
+          <v-btn text outlined small @click="changeImageNext">Next</v-btn>
+        </div>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col class="py-0">
+        <v-sheet rounded="lg" class="overflow-auto">
+          <ClientOnly v-if="photos.length > 0">
+            <PhotoView
+              :album="album"
+              :photo="photos[currentIndex]"
+              @posted-comment="socket.emit('refresh')"
+            ></PhotoView>
+          </ClientOnly>
+
+          <v-container v-else>
+            <v-row>
+              <v-col>
+                <span>You have no photos in this album.</span>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-sheet>
       </v-col>
     </v-row>
@@ -11,11 +55,12 @@
 </template>
 
 <script>
-import SlideShow from '~/components/Album/Slideshow'
+import { io } from 'socket.io-client'
+import PhotoView from '@/components/Photo/PhotoView'
 
 export default {
   name: 'SlideshowPage',
-  components: { SlideShow },
+  components: { PhotoView },
   layout: 'default',
   async asyncData({ params, $axios, error }) {
     try {
@@ -30,9 +75,42 @@ export default {
     return {
       album: {},
       photos: [],
+      socket: null,
+      currentIndex: 0,
     }
   },
-  methods: {},
+
+  mounted() {
+    this.socket = io('http://localhost:3333')
+    this.socket.emit('create', { room: this.$route.path, user: this.$auth.user })
+    this.socket.on('imageChangeClient', (message) => {
+      this.currentIndex = this.photos.findIndex((photo) => photo.id === message.photo.id)
+    })
+    this.socket.on('connectToRoom', () => {
+      this.socket.emit('imageChangeServer', { photo: this.photos[this.currentIndex] })
+    })
+    this.socket.on('refresh', () => {
+      this.$nuxt.refresh()
+    })
+  },
+  methods: {
+    changeImagePrevious() {
+      if (this.currentIndex === 0) {
+        this.currentIndex = this.photos.length - 1
+      } else {
+        this.currentIndex--
+      }
+      this.socket.emit('imageChangeServer', { photo: this.photos[this.currentIndex] })
+    },
+    changeImageNext() {
+      if (this.currentIndex === this.photos.length - 1) {
+        this.currentIndex = 0
+      } else {
+        this.currentIndex++
+      }
+      this.socket.emit('imageChangeServer', { photo: this.photos[this.currentIndex] })
+    },
+  },
 }
 </script>
 

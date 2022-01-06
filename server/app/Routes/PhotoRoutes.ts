@@ -22,3 +22,5 @@ Route.delete('/albums/:album_id/photos/:photo_id', 'PhotoController.delete')
   .where('album_id', Route.matchers.number())
   .where('photo_id', Route.matchers.number())
   .middleware('auth')
+
+Route.get('/lookup/:search', 'PhotoController.lookup').middleware('auth')

@@ -21,7 +21,9 @@
     <v-row>
       <v-col class="py-0">
         <v-sheet rounded="lg" class="overflow-auto">
-          <PhotoView :album="album" :photo="photo"></PhotoView>
+          <ClientOnly>
+            <PhotoView :album="album" :photo="photo"></PhotoView>
+          </ClientOnly>
         </v-sheet>
       </v-col>
     </v-row>

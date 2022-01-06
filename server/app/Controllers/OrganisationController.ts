@@ -74,7 +74,7 @@ export default class OrganisationController {
     const user = await User.find(ctx.request.param('user_id'))
     if (!user) return ctx.response.notFound({ message: 'User not found' })
 
-    await user.related('organisations').sync([organisation.id], false)
+    await organisation.related('users').sync([user.id], false)
     await organisation.load('users')
     return ctx.response.ok(organisation)
   }

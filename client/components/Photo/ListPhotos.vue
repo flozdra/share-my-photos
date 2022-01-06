@@ -3,7 +3,7 @@
     <v-row>
       <v-col class="d-flex justify-end">
         <v-btn
-          :small="$vuetify.breakpoint.xsOnly"
+          small
           :color="album.color"
           :class="getTextColor(album.color)"
           @click="$emit('upload-photos')"
@@ -109,7 +109,7 @@ export default {
       return DateTime.fromISO(date).toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)
     },
     getPhotoUrl(photo) {
-      return `http://localhost:3000/api/albums/${this.album.id}/photos/${photo.id}`
+      return `http://${window.location.host}/api/albums/${this.album.id}/photos/${photo.id}`
     },
     getTextColor(bgColor = '#ffffffff') {
       const color = bgColor.charAt(0) === '#' ? bgColor.substring(1, 7) : bgColor

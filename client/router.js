@@ -7,6 +7,7 @@ import OrganisationPage from '@/pages/home/organisation'
 import AlbumPage from '@/pages/home/album'
 import PhotoPage from '@/pages/home/photo'
 import SlideshowPage from '@/pages/home/slideshow'
+import LookupPage from '@/pages/home/lookup'
 
 Vue.use(Router)
 
@@ -43,6 +44,11 @@ export function createRouter() {
         path: '/home/organisations/:org_id/albums/:alb_id/slideshow',
         component: SlideshowPage,
         name: 'slideshow-page',
+      },
+      {
+        path: '/home/lookup/:search',
+        component: LookupPage,
+        name: 'lookup-page',
       },
     ],
   })

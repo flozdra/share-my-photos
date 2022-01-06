@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row v-if="$vuetify.breakpoint.xs">
-      <v-col cols="12">
+      <v-col cols="12" class="py-2">
         <div>
           <v-avatar :color="photo.user.color" size="30" class="my-1">
             <span class="white--text text-body-2">{{ photo.user.initials }}</span>
@@ -11,7 +11,7 @@
           </span>
         </div>
       </v-col>
-      <v-col cols=12 class="black pa-0">
+      <v-col cols="12" class="black pa-0">
         <v-img :src="photoUrl" max-height="250" contain>
           <template #placeholder>
             <div class="d-flex fill-height align-center justify-center">
@@ -49,13 +49,13 @@
           :style="`max-height: ${$vuetify.breakpoint.xs ? 150 : undefined}px`"
         >
           <div v-for="(comm, i) of photo.comments" :key="i" class="ma-2 px-2 d-flex">
-            <v-avatar :color="photo.user.color" size="24" class="my-1">
-              <span class="white--text text-caption">{{ photo.user.initials }}</span>
+            <v-avatar :color="comm.user.color" size="26" class="my-1">
+              <span class="white--text text-caption">{{ comm.user.initials }}</span>
             </v-avatar>
             <div class="ml-2 d-flex flex-column">
               <span class="text-caption">
                 <span class="font-weight-bold mr-1">
-                  {{ 'Florian Zdrada' }}
+                  {{ comm.user.fullName }}
                 </span>
                 {{ comm.text }}
               </span>
@@ -69,6 +69,7 @@
             There are no comments.
           </span>
         </div>
+
         <v-divider></v-divider>
 
         <div class="ma-2 px-2 d-flex align-end">
@@ -100,7 +101,12 @@
     </v-row>
     <v-row v-else>
       <v-col class="black pa-0 d-flex align-center">
-        <v-img :src="photoUrl" height="400" width="400" contain>
+        <v-img
+          :src="photoUrl"
+          :height="$vuetify.breakpoint.sm ? 400 : 700"
+          :width="$vuetify.breakpoint.sm ? 400 : 700"
+          contain
+        >
           <template #placeholder>
             <div class="d-flex fill-height align-center justify-center">
               <v-progress-circular indeterminate color="secondary" size="60"></v-progress-circular>
@@ -110,7 +116,7 @@
       </v-col>
       <v-col
         class="pa-0 d-flex flex-column"
-        :style="`max-height: ${$vuetify.breakpoint.xs ? undefined : 500}px`"
+        :style="`height: ${$vuetify.breakpoint.sm ? 400 : 700}px`"
       >
         <div class="ma-2 px-2">
           <v-avatar :color="photo.user.color" size="30" class="my-1">
@@ -140,18 +146,15 @@
         <div class="ma-2 px-2">
           <span class="text-caption text--secondary">Comments</span>
         </div>
-        <div
-          class="flex-grow-1 overflow-auto"
-          :style="`max-height: ${$vuetify.breakpoint.xs ? 150 : undefined}px`"
-        >
+        <div class="flex-grow-1 overflow-auto">
           <div v-for="(comm, i) of photo.comments" :key="i" class="ma-2 px-2 d-flex">
-            <v-avatar :color="photo.user.color" size="24" class="my-1">
-              <span class="white--text text-caption">{{ photo.user.initials }}</span>
+            <v-avatar :color="comm.user.color" size="26" class="my-1">
+              <span class="white--text text-caption">{{ comm.user.initials }}</span>
             </v-avatar>
             <div class="ml-2 d-flex flex-column">
               <span class="text-caption">
                 <span class="font-weight-bold mr-1">
-                  {{ 'Florian Zdrada' }}
+                  {{ comm.user.fullName }}
                 </span>
                 {{ comm.text }}
               </span>
@@ -167,7 +170,7 @@
         </div>
         <v-divider></v-divider>
 
-        <div class="ma-2 px-2 d-flex align-end">
+        <div class="ma-2 px-2 d-flex align-b">
           <v-text-field
             v-model="comment"
             class="text-body-2 pa-0 my-1 align-center"
@@ -220,11 +223,12 @@ export default {
   },
   computed: {
     photoUrl() {
-      return `http://localhost:3000/api/albums/${this.album.id}/photos/${this.photo.id}`
+      return `http://${window.location.host}/api/albums/${this.album.id}/photos/${this.photo.id}`
     },
     formattedDate() {
       return DateTime.fromISO(this.photo.creation).toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)
     },
+
   },
   methods: {
     async postComment() {
@@ -237,6 +241,7 @@ export default {
         })
         this.comment = ''
         await this.$nuxt.refresh()
+        this.$emit('posted-comment')
       } catch {}
       this.loading = false
     },

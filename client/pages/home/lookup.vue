@@ -2,29 +2,11 @@
   <v-container>
     <v-row>
       <v-col class="d-flex align-baseline">
-        <v-btn
-          icon
-          small
-          color="transparent"
-          class="mr-4"
-          :to="`/home/organisations/${$route.params.org_id}`"
-        >
+        <v-btn icon small color="transparent" class="mr-4" @click="$router.go(-1)">
           <v-icon color="black">mdi-arrow-left</v-icon>
         </v-btn>
-        <span class="text-h5 font-weight-black mr-3">{{ album.name }}</span>
-        <span class="text--secondary text-caption">
-          {{ `${photos.length} photos` }}
-        </span>
-        <v-spacer />
-        <v-btn
-          small
-          :color="album.color"
-          :class="getTextColor(album.color)"
-          :to="{ path: 'slideshow' }"
-          append
-        >
-          Slideshow
-        </v-btn>
+
+        <span class="text-h5 font-weight-black mr-3">Search</span>
       </v-col>
     </v-row>
 
@@ -32,15 +14,11 @@
       <v-col class="py-0">
         <v-sheet min-height="70vh" rounded="lg" class="overflow-auto pa-2">
           <ClientOnly>
-            <ListPhotos :album="album" :photos="photos" @upload-photos="dialog = true"></ListPhotos>
+            <LookupResult :result="result"></LookupResult>
           </ClientOnly>
         </v-sheet>
       </v-col>
     </v-row>
-
-    <v-dialog v-if="dialog" v-model="dialog" max-width="350">
-      <UploadPhotos :album="album" @close="closeDialog"></UploadPhotos>
-    </v-dialog>
 
     <v-dialog
       v-if="photoView.dialog"
@@ -50,7 +28,7 @@
     >
       <v-sheet rounded="lg" class="overflow-auto">
         <ClientOnly>
-          <PhotoView :album="album" :photo="photos[photoView.index]"></PhotoView>
+          <PhotoView :album="albumSelected" :photo="photoSelected"></PhotoView>
         </ClientOnly>
       </v-sheet>
     </v-dialog>
@@ -58,42 +36,59 @@
 </template>
 
 <script>
-import ListPhotos from '@/components/Photo/ListPhotos'
-import UploadPhotos from '@/components/Photo/UploadPhotos'
+import LookupResult from '@/components/Photo/LookupResult'
 import PhotoView from '@/components/Photo/PhotoView'
 
 export default {
-  name: 'AlbumPage',
-  components: { PhotoView, UploadPhotos, ListPhotos },
+  name: 'LookupPage',
+  components: { PhotoView, LookupResult },
   beforeRouteLeave(to, from, next) {
     if (to.name === 'photo-page') {
-      this.photoView.index = this.photos.findIndex((p) => +p.id === +to.params.photo_id)
-      this.photoView.dialog = true
-      window.history.pushState({}, null, to.path)
-    } else {
-      next()
+      for (const [orgIndex, org] of this.result.entries()) {
+        for (const [albumIndex, album] of org.albums.entries()) {
+          for (const [photoIndex, photo] of album.photos.entries()) {
+            if (photo.id === +to.params.photo_id) {
+              this.photoView.orgIndex = orgIndex
+              this.photoView.albumIndex = albumIndex
+              this.photoView.photoIndex = photoIndex
+              this.photoView.dialog = true
+
+              window.history.pushState({}, null, to.path)
+              return
+            }
+          }
+        }
+      }
     }
+    next()
   },
   layout: 'default',
   async asyncData({ params, $axios, error }) {
     try {
-      const album = await $axios.get(`/api/organisations/${params.org_id}/albums/${params.alb_id}`)
-      const photos = await $axios.get(`/api/albums/${params.alb_id}/photos`)
-      return { album: album.data, photos: photos.data }
+      const response = await $axios.get(`api/lookup/${params.search}`)
+      return { result: response.data }
     } catch (e) {
       return error({ statusCode: 404, message: 'Page not found' })
     }
   },
   data() {
     return {
-      album: {},
-      photos: [],
-      dialog: false,
+      result: [],
       photoView: {
         dialog: false,
-        photo: null,
+        orgIndex: null,
+        albumIndex: null,
+        photoIndex: null,
       },
     }
+  },
+  computed: {
+    albumSelected() {
+      return this.result[this.photoView.orgIndex]?.albums[this.photoView.albumIndex]
+    },
+    photoSelected() {
+      return this.albumSelected?.photos[this.photoView.photoIndex]
+    },
   },
   methods: {
     async closeDialog(refresh) {
@@ -101,9 +96,10 @@ export default {
       if (refresh) await this.$nuxt.refresh()
     },
     exitPhotoView() {
-      this.photoView.photo = null
+      this.photoView.orgIndex = null
+      this.photoView.albumIndex = null
+      this.photoView.photoIndex = null
       this.photoView.dialog = false
-      // const params = this.$route.params
       this.$router.go(-1)
     },
     getTextColor(bgColor = '#ffffffff') {

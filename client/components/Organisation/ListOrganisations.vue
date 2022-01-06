@@ -29,11 +29,11 @@
             <v-avatar
               v-for="(user, idx) in org.users.slice(0, 3)"
               :key="idx"
-              class="ml-n2"
+              class="ml-n2 elevation-2"
               :color="user.color"
-              size="32"
+              size="30"
             >
-              <span class="white--text">{{ user.initials }}</span>
+              <span class="white--text text-caption font-weight-medium">{{ user.initials }}</span>
             </v-avatar>
             <span
               v-if="org.users.length > 3"
@@ -103,6 +103,6 @@ export default {
 
 <style scoped>
 .org-card {
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0%, rgba(255, 255, 255, 0) 60%);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(255, 255, 255, 0) 60%);
 }
 </style>

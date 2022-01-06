@@ -9,7 +9,6 @@ import { extname } from 'path'
 const { v4: uuidv4 } = require('uuid')
 
 export default class PhotoController {
-
   public async create(ctx: HttpContextContract) {
     await ctx.auth.user?.load('organisations')
     const payload = await ctx.request.validate({
@@ -57,8 +56,12 @@ export default class PhotoController {
 
     await ctx.bouncer.authorize('getAlbum', album)
 
-    await album.load('photos', (photo) => photo.preload('comments').preload('user'))
-    return ctx.response.ok(album.photos)
+    await album.load('photos', (photo) =>
+      photo.preload('comments', (comments) => comments.preload('user')).preload('user')
+    )
+    return ctx.response.ok(
+      album.photos.sort((a, b) => a.creation.toMillis() - b.creation.toMillis())
+    )
   }
 
   public async get(ctx: HttpContextContract) {
@@ -77,7 +80,7 @@ export default class PhotoController {
           ctx.response.header('content-length', size)
           return ctx.response.stream(await Drive.getStream(photo.url))
         case 'json':
-          await photo.load('comments')
+          await photo.load('comments', (comments) => comments.preload('user'))
           await photo.load('album')
           await photo.load('user')
           return ctx.response.ok(photo)
@@ -121,5 +124,35 @@ export default class PhotoController {
     await Drive.delete(photo.url)
     await photo.delete()
     return ctx.response.ok({ message: 'Successfully deleted' })
+  }
+
+  public async lookup(ctx: HttpContextContract) {
+    try {
+      const search = ctx.request.param('search')
+
+      await ctx.auth.user?.load('organisations', (organisations) =>
+        organisations.preload('albums', (album) =>
+          album.preload('photos', (photos) =>
+            photos
+              .preload('user')
+              .preload('comments', (comments) => comments.preload('user'))
+              .where('description', 'ILIKE', `%${search}%`)
+              .orWhereRaw(`array_to_string(tags, ',') ILIKE '%${search}%'`)
+          )
+        )
+      )
+      const organisations = (await ctx.auth.user?.organisations) || []
+
+      for (const org of organisations) {
+        // @ts-ignore
+        org.albums = org.albums.filter((a) => a.photos.length > 0)
+      }
+      const result = organisations.filter((o) => o.albums.length > 0)
+
+      return ctx.response.ok(result)
+    } catch (e) {
+      ctx.logger.error(e)
+      return ctx.response.internalServerError({ message: 'Internal server error' })
+    }
   }
 }

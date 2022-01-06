@@ -9,7 +9,6 @@
 
         <v-text-field
           v-model="password"
-          :rules="passwordRules"
           label="Password"
           type="password"
           autocomplete="new-password"

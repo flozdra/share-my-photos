@@ -1,18 +1,15 @@
 <template>
   <v-container>
-    <v-btn @click='changeImagePrevious'>Previous</v-btn>
-    <v-btn @click='changeImageNext'>Next</v-btn>
+    <v-btn @click="changeImagePrevious">Previous</v-btn>
+    <v-btn @click="changeImageNext">Next</v-btn>
     <v-container>
-      <v-row v-if='photos.length>0'>
-        <v-col class='py-0'>
-          <v-sheet rounded='lg' class='overflow-auto'>
-            <PhotoView :album='album' :photo='photos[currentIndex]'></PhotoView>
+      <v-row v-if="photos.length > 0">
+        <v-col class="py-0">
+          <v-sheet rounded="lg" class="overflow-auto">
+            <ClientOnly>
+              <PhotoView :album="album" :photo="photos[currentIndex]"></PhotoView>
+            </ClientOnly>
           </v-sheet>
-        </v-col>
-      </v-row>
-      <v-row v-else>
-        <v-col>
-          <span>You have no photos in this album.</span>
         </v-col>
       </v-row>
     </v-container>
@@ -20,10 +17,8 @@
 </template>
 
 <script>
-
 import { io } from 'socket.io-client'
 import PhotoView from '~/components/Photo/PhotoView'
-
 
 export default {
   name: 'SlideShow',
@@ -41,7 +36,6 @@ export default {
   data() {
     return {
       socket: null,
-      imgSize: 100,
       currentIndex: 0,
     }
   },
@@ -72,12 +66,8 @@ export default {
       }
       this.socket.emit('imageChangeServer', { photo: this.photos[this.currentIndex] })
     },
-
   },
-
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

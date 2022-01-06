@@ -1,7 +1,7 @@
 <template>
   <v-app id="share-my-photos-app">
     <v-app-bar app color="#03224A" flat>
-      <v-container v-if="$vuetify.breakpoint.smAndUp" class="py-0 fill-height">
+      <v-container class="py-0 fill-height">
         <nuxt-link to="/home" style="text-decoration: none; color: inherit">
           <div class="d-flex align-center">
             <v-img
@@ -15,15 +15,54 @@
 
         <v-spacer></v-spacer>
 
-        <v-responsive max-width="260">
+        <v-responsive v-if="$vuetify.breakpoint.smAndUp" max-width="260">
           <v-text-field
+            v-model="search"
             class="text-caption"
             rounded
             placeholder="Search album, photo, ..."
             hide-details
             background-color="shade"
+            @keydown.enter="lookup"
           ></v-text-field>
         </v-responsive>
+
+        <v-menu offset-y>
+          <template #activator="{ on, attrs }">
+            <v-avatar
+              :color="$auth.user.color"
+              size="32"
+              class="ml-4 my-1"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <span class="white--text text-body-2">{{ $auth.user.initials }}</span>
+            </v-avatar>
+          </template>
+          <v-card width="180">
+            <v-card-title class="pa-0 shade">
+              <v-avatar
+                :color="$auth.user.color"
+                size="40"
+                class="mt-3 mx-auto mb-n5"
+                style="border: solid 2px white"
+              >
+                <span class="white--text text-body-2">{{ $auth.user.initials }}</span>
+              </v-avatar>
+            </v-card-title>
+            <div class="mt-5 px-3 text-center d-flex flex-column">
+              <span class="text-caption font-weight-medium">
+                {{ $auth.user.fullName }}
+              </span>
+              <span class="text--secondary" style="font-size: 10px">
+                {{ $auth.user.email }}
+              </span>
+            </div>
+            <v-card-actions class="d-flex justify-center">
+              <v-btn x-small text color="error" @click="logout">Logout</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-menu>
       </v-container>
     </v-app-bar>
 
@@ -44,8 +83,18 @@ export default {
   name: 'DefaultLayout',
   data() {
     return {
+      search: '',
       links: ['Dashboard'],
     }
+  },
+  methods: {
+    async logout() {
+      await this.$auth.logout()
+    },
+
+    async lookup() {
+      await this.$router.push(`/home/lookup/${this.search}`)
+    },
   },
 }
 </script>
