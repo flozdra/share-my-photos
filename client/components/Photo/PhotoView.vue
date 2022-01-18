@@ -226,7 +226,7 @@ export default {
   },
   computed: {
     photoUrl() {
-      return `http://${window.location.host}/api/albums/${this.album.id}/photos/${this.photo.id}`
+      return `${this.$config.backendHost}:${this.$config.backendPort}${this.$config.backendPathRewrite}albums/${this.album.id}/photos/${this.photo.id}`
     },
     formattedDate() {
       return DateTime.fromISO(this.photo.creation).toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)

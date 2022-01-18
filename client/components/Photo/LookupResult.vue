@@ -120,7 +120,7 @@ export default {
       return DateTime.fromISO(date).toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)
     },
     getPhotoUrl(album, photo) {
-      return `http://${window.location.host}/api/albums/${album.id}/photos/${photo.id}`
+      return `${this.$config.backendHost}:${this.$config.backendPort}${this.$config.backendPathRewrite}albums/${album.id}/photos/${photo.id}`
     },
     getTextColor(bgColor = '#ffffffff') {
       const color = bgColor.charAt(0) === '#' ? bgColor.substring(1, 7) : bgColor
