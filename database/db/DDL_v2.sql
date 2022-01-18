@@ -1,9 +1,9 @@
-create database share_my_photos
+create database share-my-photos
 with owner postgres;
 
-grant connect, create, temporary on database share_my_photos to postgres;
+grant connect, create, temporary on database share-my-photos to postgres;
 
-\connect share_my_photos postgres
+\connect share-my-photos postgres
 
 create schema app;
 
