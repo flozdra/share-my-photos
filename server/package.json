@@ -9,6 +9,9 @@
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write ."
   },
+  "engines": {
+    "node": ">=16.13.1"
+  },
   "devDependencies": {
     "@adonisjs/assembler": "^5.3.8",
     "adonis-preset-ts": "^2.1.0",
@@ -39,5 +42,5 @@
     "reflect-metadata": "^0.1.13",
     "socket.io": "^4.4.0",
     "source-map-support": "^0.5.21"
-  }
+  },
 }
