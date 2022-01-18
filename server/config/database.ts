@@ -41,6 +41,17 @@ const databaseConfig: DatabaseConfig = {
         user: Env.get('POSTGRES_USER'),
         password: Env.get('POSTGRES_PASSWORD', ''),
         database: Env.get('POSTGRES_DB_NAME'),
+        ssl:
+          Env.get('NODE_ENV') === 'development'
+            ? false
+            : {
+                rejectUnauthorized: false,
+                requestCert: true,
+                // do not modify formatting of this var !!!
+                cert: `-----BEGIN CERTIFICATE-----
+${Env.get('PG_CERT').replace(/\\n/g, '\n')}
+-----END CERTIFICATE-----`,
+              },
       },
       migrations: {
         naturalSort: true,
