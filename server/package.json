@@ -13,7 +13,6 @@
     "node": ">=16.13.1"
   },
   "devDependencies": {
-    "@adonisjs/assembler": "^5.3.8",
     "adonis-preset-ts": "^2.1.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
@@ -27,6 +26,7 @@
   },
   "dependencies": {
     "@adonisjs/auth": "^8.0.10",
+    "@adonisjs/assembler": "^5.3.8",
     "@adonisjs/bouncer": "^2.2.5",
     "@adonisjs/core": "^5.4.1",
     "@adonisjs/drive-s3": "^1.0.5",
