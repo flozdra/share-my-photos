@@ -4,6 +4,7 @@ export default {
   publicRuntimeConfig: {
     backendHost: process.env.BACKEND_HOST,
     backendPort: process.env.BACKEND_PORT,
+    backendPathRewrite: process.env.BACKEND_PATH_REWRITE,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -96,7 +97,7 @@ export default {
   proxy: {
     '/api/': {
       target: `${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}`,
-      pathRewrite: { '^/api/': '' },
+      pathRewrite: { '^/api/': process.env.BACKEND_PATH_REWRITE },
       changeOrigin: true,
     },
   },
