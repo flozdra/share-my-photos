@@ -9,8 +9,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - client',
-    title: 'client',
+    titleTemplate: 'Share my photos',
+    title: 'Share my photos',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -111,8 +111,26 @@ export default {
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
+    icon: {
+      source: './static/pwa/icon.png',
+      filename: 'icon.png',
+    },
     manifest: {
+      name: 'Share my photos',
       lang: 'en',
+      theme_color: '#03224A',
+      background_color: '#03224A',
+      short_name: 'Share my photos',
+      crossorigin: 'use-credentials',
+    },
+    meta: {
+      name: 'Share my photos',
+      og: {
+        title: 'Share my photos',
+      },
+      theme_color: '#03224A',
+      background_color: '#03224A',
+      appleStatusBarStyle: 'black',
     },
   },
 

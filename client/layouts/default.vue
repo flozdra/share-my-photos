@@ -1,6 +1,6 @@
 <template>
   <v-app id="share-my-photos-app">
-    <v-app-bar app color="#03224A" flat>
+    <v-app-bar app color="#03224A" flat height="60">
       <v-container class="py-0 fill-height">
         <nuxt-link to="/home" style="text-decoration: none; color: inherit">
           <div class="d-flex align-center">
@@ -27,39 +27,39 @@
           ></v-text-field>
         </v-responsive>
 
-        <v-menu offset-y>
+        <v-menu v-if="$auth.user" offset-y>
           <template #activator="{ on, attrs }">
             <v-avatar
               :color="$auth.user.color"
-              size="32"
+              size="40"
               class="ml-4 my-1"
               v-bind="attrs"
               v-on="on"
             >
-              <span class="white--text text-body-2">{{ $auth.user.initials }}</span>
+              <span class="white--text text-body-1 font-weight-medium">{{ $auth.user.initials }}</span>
             </v-avatar>
           </template>
-          <v-card width="180">
+          <v-card width="230">
             <v-card-title class="pa-0 shade">
               <v-avatar
                 :color="$auth.user.color"
-                size="40"
-                class="mt-3 mx-auto mb-n5"
+                size="60"
+                class="mt-3 mx-auto mb-n7"
                 style="border: solid 2px white"
               >
-                <span class="white--text text-body-2">{{ $auth.user.initials }}</span>
+                <span class="white--text text-h6 font-weight-medium">{{ $auth.user.initials }}</span>
               </v-avatar>
             </v-card-title>
-            <div class="mt-5 px-3 text-center d-flex flex-column">
-              <span class="text-caption font-weight-medium">
+            <div class="mt-9 px-3 text-center d-flex flex-column">
+              <span class="text-body-2 font-weight-medium">
                 {{ $auth.user.fullName }}
               </span>
-              <span class="text--secondary" style="font-size: 10px">
+              <span class="text-caption text--secondary">
                 {{ $auth.user.email }}
               </span>
             </div>
             <v-card-actions class="d-flex justify-center">
-              <v-btn x-small text color="error" @click="logout">Logout</v-btn>
+              <v-btn small text color="error" @click="logout">Logout</v-btn>
             </v-card-actions>
           </v-card>
         </v-menu>
@@ -90,6 +90,7 @@ export default {
   methods: {
     async logout() {
       await this.$auth.logout()
+      // document.cookie = 'XSRF-TOKEN=null;expires=Thu, 01 Jan 1970 00:00:01 GMT'
     },
 
     async lookup() {

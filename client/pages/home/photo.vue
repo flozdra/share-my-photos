@@ -36,12 +36,13 @@ export default {
   name: 'PhotoPage',
   components: { PhotoView },
   layout: 'default',
-  async asyncData({ params, $axios, error }) {
+  async asyncData({ params, $axios, redirect, error }) {
     try {
       const album = await $axios.get(`/api/organisations/${params.org_id}/albums/${params.alb_id}`)
       const photo = await $axios.get(`/api/albums/${params.alb_id}/photos/${params.photo_id}`)
       return { album: album.data, photo: photo.data }
     } catch (e) {
+      if (e.response.status === 401) return redirect('/')
       return error({ statusCode: 404, message: 'Page not found' })
     }
   },

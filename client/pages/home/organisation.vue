@@ -15,7 +15,7 @@
             <div
               v-ripple
               class="avatar"
-              style="cursor: pointer; background-color: #eeeeee; border: 0"
+              style="border: solid 0.1rem #b9baba; cursor: pointer; background-color: #eeeeee"
               @click="addPeople.dialog = true"
             >
               <span class="white--text font-weight-medium"><v-icon>mdi-plus</v-icon></span>
@@ -34,7 +34,7 @@
             class="d-flex flex-column"
             style="user-select: none"
           >
-            <div class="avatar" :style="`background-color: ${user.color}`">
+            <div class="avatar elevation-2" :style="`background-color: ${user.color}`">
               <span class="white--text font-weight-medium">{{ user.initials }}</span>
             </div>
             <span class="text-center mt-1" style="font-size: 10px">{{ user.firstname }}</span>
@@ -73,13 +73,14 @@ export default {
   name: 'OrganisationPage',
   components: { AddPeople, AddEditAlbum, ListAlbums },
   layout: 'default',
-  async asyncData({ params, $axios, error }) {
+  async asyncData({ params, $axios, redirect, error }) {
     try {
       const organisation = await $axios.get(`/api/organisations/${params.org_id}`)
       const albums = await $axios.get(`/api/organisations/${params.org_id}/albums`)
 
       return { organisation: organisation.data, albums: albums.data }
     } catch (e) {
+      if (e.response.status === 401) return redirect('/')
       return error({ statusCode: 404, message: 'Page not found' })
     }
   },
@@ -124,7 +125,5 @@ export default {
   align-items: center;
   justify-content: center;
   border-radius: 14px;
-  border: solid 2px #eeeeee;
-  outline: solid 1px #808080;
 }
 </style>

@@ -34,12 +34,12 @@ export default {
   name: 'HomePage',
   components: { AddEditOrganisation, ListOrganisations },
   layout: 'default',
-  middleware: 'auth',
-  async asyncData({ $axios, error }) {
+  async asyncData({ $axios, redirect, error }) {
     try {
       const response = await $axios.get(`/api/organisations`)
       return { organisations: response.data }
     } catch (e) {
+      if (e.response.status === 401) return redirect('/')
       return error({ statusCode: 500, message: 'Internal server error' })
     }
   },

@@ -79,12 +79,13 @@ export default {
     }
   },
   layout: 'default',
-  async asyncData({ params, $axios, error }) {
+  async asyncData({ params, $axios, redirect, error }) {
     try {
       const album = await $axios.get(`/api/organisations/${params.org_id}/albums/${params.alb_id}`)
       const photos = await $axios.get(`/api/albums/${params.alb_id}/photos`)
       return { album: album.data, photos: photos.data }
     } catch (e) {
+      if (e.response.status === 401) return redirect('/')
       return error({ statusCode: 404, message: 'Page not found' })
     }
   },

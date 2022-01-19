@@ -63,11 +63,12 @@ export default {
     next()
   },
   layout: 'default',
-  async asyncData({ params, $axios, error }) {
+  async asyncData({ params, $axios, redirect, error }) {
     try {
       const response = await $axios.get(`api/lookup/${params.search}`)
       return { result: response.data }
     } catch (e) {
+      if (e.response.status === 401) return redirect('/')
       return error({ statusCode: 404, message: 'Page not found' })
     }
   },

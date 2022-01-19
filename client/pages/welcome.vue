@@ -93,9 +93,16 @@ import Register from '~/components/Register'
 
 export default {
   name: 'WelcomePage',
-  auth: 'guest',
   components: { Login, Register },
   layout: 'empty',
+  async asyncData(ctx) {
+    if (ctx.app.$auth.user) {
+      try {
+        await ctx.$axios.get('/api/auth/user')
+        return ctx.redirect('/home')
+      } catch {}
+    }
+  },
   data() {
     return {
       show: 'menu', // enum('menu', 'login', 'register')
