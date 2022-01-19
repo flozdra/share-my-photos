@@ -114,6 +114,7 @@ export default {
     icon: {
       source: './static/pwa/icon.png',
       filename: 'icon.png',
+      purpose: 'maskable',
     },
     manifest: {
       name: 'Share my photos',
