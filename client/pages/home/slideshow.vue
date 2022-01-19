@@ -82,9 +82,10 @@ export default {
   },
 
   mounted() {
-    this.socket = io(
-      `${this.$config.backendHost}:${this.$config.backendPort}${this.$config.backendPathRewrite}`
-    )
+    this.socket = io.connect(`${this.$config.backendHost}:${this.$config.backendPort}`, {
+      path: `${this.$config.backendPathRewrite}socket.io`,
+    })
+
     this.socket.emit('create', { room: this.$route.path, user: this.$auth.user })
     this.socket.on('imageChangeClient', (message) => {
       this.currentIndex = this.photos.findIndex((photo) => photo.id === message.photo.id)
