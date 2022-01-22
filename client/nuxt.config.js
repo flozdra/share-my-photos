@@ -112,8 +112,8 @@ export default {
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     icon: {
-      source: './static/pwa/icon.png',
-      filename: 'icon.png',
+      source: './static/pwa/pwa-icon.png',
+      filename: 'pwa-icon.png',
       purpose: 'maskable',
     },
     manifest: {
